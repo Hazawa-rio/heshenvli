@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>和善里茶樓 · 官方網站</title>
+<meta name="description" content="和善里茶樓，百年茶香，靜心品茗。">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDE3D0;
+    --panel:#F7F1E3;
+    --ink:#2A2018;
+    --ink-soft:#5B4C3B;
+    --wood:#6B4226;
+    --wood-dark:#3C2415;
+    --gold:#B8893F;
+    --red:#8B2E22;
+    --line:#D9C9A6;
+    --font-display:'Noto Serif TC', serif;
+    --font-body:'Noto Sans TC', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  :focus-visible{outline:2.5px solid var(--red); outline-offset:3px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+
+  .wrap{max-width:960px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    background:var(--wood-dark);
+    color:#EFE3CC;
+  }
+  .topbar .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    padding:16px 24px;
+  }
+  .brand{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:.03em;
+  }
+  .brand span{color:var(--gold);}
+
+  .search-form{
+    display:flex;
+    align-items:center;
+    gap:0;
+  }
+  .search-form input{
+    font-family:var(--font-body);
+    font-size:14px;
+    padding:9px 14px;
+    border:1.5px solid var(--gold);
+    border-right:none;
+    background:#FBF6EA;
+    color:var(--ink);
+    width:180px;
+    outline:none;
+  }
+  .search-form input::placeholder{color:#9C8B70;}
+  .search-form button{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:14px;
+    padding:9px 16px;
+    border:1.5px solid var(--gold);
+    background:var(--gold);
+    color:#2A2018;
+    cursor:pointer;
+  }
+  .search-form button:hover{background:#CBA458;}
+
+  /* ---------- Search result panel ---------- */
+  .search-result{
+    display:none;
+    background:#FBF6EA;
+    border-bottom:1px solid var(--line);
+  }
+  .search-result.show{display:block;}
+  .search-result .wrap{padding:20px 24px;}
+  .search-result h4{
+    font-family:var(--font-display);
+    margin:0 0 8px;
+    font-size:17px;
+  }
+  .search-result p{margin:0; color:var(--ink-soft); max-width:66ch;}
+  .search-result .not-found{color:var(--red); font-weight:700;}
+  .search-result .close-result{
+    float:right;
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* ---------- Hero (A) ---------- */
+  .tea-hero{
+    position:relative;
+    min-height:340px;
+    display:flex;
+    align-items:flex-end;
+    background-size:cover;
+    background-position:center;
+  }
+  .tea-hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(20,14,8,.15) 0%, rgba(20,14,8,.75) 100%);
+  }
+  .tea-hero .wrap{position:relative; z-index:1; padding-bottom:36px;}
+  .tea-hero h1{
+    font-family:var(--font-display);
+    font-weight:900;
+    color:#FBF6EA;
+    font-size:clamp(32px, 5vw, 50px);
+    margin:0 0 6px;
+    text-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  .tea-hero .tagline{
+    color:#E5D6B8;
+    font-size:15px;
+    margin:0;
+  }
+
+  /* ---------- Info (B) ---------- */
+  .info-panel{
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+    padding:28px 0;
+  }
+  @media (max-width:680px){ .info-grid{grid-template-columns:1fr;} }
+  .info-item .label{
+    font-size:12px;
+    font-weight:700;
+    color:var(--gold);
+    letter-spacing:.05em;
+    margin-bottom:4px;
+  }
+  .info-item .value{font-size:15px; color:var(--ink);}
+
+  /* ---------- Description (C) ---------- */
+  section.block{padding:46px 0;}
+  section.block h2{
+    font-family:var(--font-display);
+    font-size:24px;
+    margin:0 0 16px;
+  }
+  section.block p{max-width:68ch; color:var(--ink-soft);}
+  .clue{
+    font-weight:900;
+    color:var(--wood-dark);
+    background:linear-gradient(transparent 65%, #E3C077 65%);
+  }
+
+  /* ---------- Reviews (D) ---------- */
+  .reviews{background:var(--panel); border-top:1px solid var(--line);}
+  .review-card{
+    background:#FBF6EA;
+    border:1px solid var(--line);
+    padding:18px 20px;
+    margin-bottom:16px;
+  }
+  .review-card .who{
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--wood);
+    margin-bottom:6px;
+  }
+  .review-card p{margin:0; color:var(--ink); max-width:none;}
+  .review-card.archived{
+    background:#E7E0D2;
+    border-style:dashed;
+    color:#8C8272;
+  }
+  .review-card.archived .who{color:#8C8272;}
+  .review-card.archived p{
+    color:#8C8272;
+    letter-spacing:.02em;
+  }
+
+  footer{
+    padding:28px 0 44px;
+    font-size:12px;
+    color:#8C7A5E;
+  }
+
+  /* ---------- Secret gate (遊客名冊) ---------- */
+  .secret-gate{
+    display:none;
+    position:fixed; inset:0;
+    background:#0B0B0C;
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .secret-gate.show{display:flex;}
+  .secret-card{
+    max-width:420px;
+    width:100%;
+    text-align:center;
+  }
+  .secret-card h2{
+    font-family:var(--font-display);
+    color:#E8D6A8;
+    font-size:24px;
+    margin:0 0 10px;
+  }
+  .secret-card .hint{
+    color:#8C8272;
+    font-size:13.5px;
+    margin-bottom:22px;
+  }
+  .secret-card input{
+    width:100%;
+    font-family:var(--font-body);
+    font-size:15px;
+    padding:12px 14px;
+    background:#18181A;
+    border:1px solid #3A3730;
+    color:#E8D6A8;
+    text-align:center;
+    outline:none;
+    margin-bottom:12px;
+  }
+  .secret-card input:focus{border-color:var(--gold);}
+  .secret-card button{
+    width:100%;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:14.5px;
+    padding:12px;
+    background:var(--gold);
+    color:#1A1409;
+    border:none;
+    cursor:pointer;
+  }
+  .secret-card button:hover{background:#CBA458;}
+  .secret-error{
+    color:var(--red);
+    font-size:13px;
+    margin-top:10px;
+    min-height:16px;
+  }
+  .secret-close{
+    display:inline-block;
+    margin-top:20px;
+    color:#8C8272;
+    font-size:12.5px;
+    text-decoration:underline;
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .secret-content{display:none;}
+  .secret-content.show{display:block;}
+  .secret-content p{color:#C9BB98; max-width:52ch; margin:0 auto 14px;}
+</style>
+</head>
+<body>
+
+  <!-- ================= 上方列：品牌名 ＋ 搜尋框 ================= -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">和善里<span>茶樓</span></div>
+      <form class="search-form" id="searchForm" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="搜尋本站內容…" aria-label="搜尋">
+        <button type="submit">搜尋</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 搜尋結果面板 -->
+  <div class="search-result" id="searchResult">
+    <div class="wrap">
+      <button class="close-result" id="closeResult">關閉 ✕</button>
+      <h4 id="resultTitle"></h4>
+      <p id="resultBody"></p>
+    </div>
+  </div>
+
+  <!-- ================= A．標題 Hero ================= -->
+  <div class="tea-hero" style="background-image:url('assets/teahouse.jpg');">
+    <div class="wrap">
+      <h1>和善里茶樓</h1>
+      <p class="tagline">百年茶香，靜心品茗</p>
+    </div>
+  </div>
+
+  <!-- ================= B．簡介 ================= -->
+  <div class="info-panel">
+    <div class="wrap">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="label">地址</div>
+          <div class="value">大安區和善里21巷6號</div>
+        </div>
+        <div class="info-item">
+          <div class="label">營業時間</div>
+          <div class="value">7:00 ～ 21:00（週一公休）</div>
+        </div>
+        <div class="info-item">
+          <div class="label">聯絡電話</div>
+          <div class="value">01-224-7841</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= C．茶樓介紹 ================= -->
+  <section class="block">
+    <div class="wrap">
+      <h2>關於我們</h2>
+      <p>
+        和善里茶樓由老闆夫婦共同經營，門口的木招牌已經掛了超過一甲子，
+        店裡飄著的茶香是許多在地人從小聞到大的味道。老闆夫婦待客親切，
+        還準備了一本<span class="clue">遊客名冊</span>，只要是回訪的熟客登記過，
+        再次上門就會獲贈一份小點心，是老茶樓才有的人情味。
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= D．評論區 ================= -->
+  <section class="reviews">
+    <div class="wrap block">
+      <h2>訪客評論</h2>
+
+      <div class="review-card">
+        <div class="who">王小姐</div>
+        <p>老闆人超好，芝麻包外皮酥脆內餡香濃，每次來都會多送一份！</p>
+      </div>
+
+      <div class="review-card">
+        <div class="who">陳先生</div>
+        <p>龍井茶清香回甘，坐在這裡喝一下午都不膩，是在地人才知道的好地方。</p>
+      </div>
+
+      <div class="review-card">
+        <div class="who">匿名遊客</div>
+        <p>第一次來就被登記進<span class="clue">遊客名冊</span>，老闆說下次來送茶點，很有人情味。</p>
+      </div>
+
+      <div class="review-card archived">
+        <div class="who">已隱藏使用者</div>
+        <p>千萬不...〔該留言已被封存〕</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      © 2026 和善里茶樓。本頁面內容均為虛擬創作。
+    </div>
+  </footer>
+
+  <!-- ================= 隱藏頁面：遊客名冊（密碼保護） ================= -->
+  <div class="secret-gate" id="secretGate">
+    <div class="secret-card">
+
+      <div id="secretLocked">
+        <h2>遊客名冊</h2>
+        <p class="hint">密碼提示：靜心品茗</p>
+        <input type="password" id="secretInput" placeholder="請輸入密碼" aria-label="密碼">
+        <button type="button" id="secretSubmit">解鎖</button>
+        <div class="secret-error" id="secretError"></div>
+      </div>
+
+      <div class="secret-content" id="secretContent">
+        <h2>歡迎回來，老朋友。</h2>
+        <p>（此處為隱藏頁面內容，之後可置換為下一階段的解謎線索。）</p>
+      </div>
+
+      <button class="secret-close" id="secretCloseBtn">離開此頁面</button>
+    </div>
+  </div>
+
+<script>
+  /* ======================================================
+     搜尋解謎邏輯
+     可搜尋關鍵字：菜單 / 龍井茶 / 芝麻包 / 遊客名冊
+     其餘輸入一律顯示「並未找到」訊息
+     ====================================================== */
+  var searchTopics = {
+    "菜單": {
+      title: "本店菜單",
+      body: "招牌品項：龍井茶、東方美人茶、桂花烏龍、芝麻包、蘿蔔糕、綠豆糕。（此區塊文字可替換為完整菜單與價位）"
+    },
+    "龍井茶": {
+      title: "龍井茶",
+      body: "本店嚴選在地龍井茶葉，茶湯清亮、回甘生津，是老饕們指定的招牌茶品，搭配和善里特有的山泉水沖泡，香氣格外清雅。"
+    },
+    "芝麻包": {
+      title: "芝麻包",
+      body: "外皮酥脆、內餡香濃的招牌小點，每日限量手工製作，深受在地老饕喜愛。"
+    }
+  };
+
+  var searchForm = document.getElementById("searchForm");
+  var searchInput = document.getElementById("searchInput");
+  var searchResult = document.getElementById("searchResult");
+  var resultTitle = document.getElementById("resultTitle");
+  var resultBody = document.getElementById("resultBody");
+  var closeResult = document.getElementById("closeResult");
+
+  function showResult(title, body, isNotFound){
+    resultTitle.textContent = title;
+    resultBody.textContent = body;
+    resultBody.className = isNotFound ? "not-found" : "";
+    searchResult.classList.add("show");
+  }
+
+  function hideResult(){
+    searchResult.classList.remove("show");
+  }
+
+  closeResult.addEventListener("click", hideResult);
+
+  searchForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var raw = searchInput.value;
+    var query = raw.trim();
+
+    if (query === "遊客名冊"){
+      hideResult();
+      openSecretGate();
+      return;
+    }
+
+    if (searchTopics.hasOwnProperty(query)){
+      var topic = searchTopics[query];
+      showResult(topic.title, topic.body, false);
+    } else if (query === ""){
+      hideResult();
+    } else {
+      showResult("搜尋結果", "並未找到「" + query + "」相關內容。", true);
+    }
+  });
+
+  /* ======================================================
+     遊客名冊祕密頁面（密碼保護）
+     謎題設計者可自行修改下方密碼
+     ====================================================== */
+  var SECRET_PASSWORD = "品茗";
+
+  var secretGate = document.getElementById("secretGate");
+  var secretLocked = document.getElementById("secretLocked");
+  var secretContent = document.getElementById("secretContent");
+  var secretInput = document.getElementById("secretInput");
+  var secretSubmit = document.getElementById("secretSubmit");
+  var secretError = document.getElementById("secretError");
+  var secretCloseBtn = document.getElementById("secretCloseBtn");
+
+  function openSecretGate(){
+    secretGate.classList.add("show");
+    secretInput.value = "";
+    secretError.textContent = "";
+    secretLocked.style.display = "block";
+    secretContent.classList.remove("show");
+    secretInput.focus();
+  }
+
+  function closeSecretGate(){
+    secretGate.classList.remove("show");
+  }
+
+  secretSubmit.addEventListener("click", function(){
+    if (secretInput.value.trim() === SECRET_PASSWORD){
+      secretLocked.style.display = "none";
+      secretContent.classList.add("show");
+      secretError.textContent = "";
+    } else {
+      secretError.textContent = "密碼錯誤，請再試一次。";
+    }
+  });
+
+  secretInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){
+      e.preventDefault();
+      secretSubmit.click();
+    }
+  });
+
+  secretCloseBtn.addEventListener("click", closeSecretGate);
+</script>
+
+</body>
+</html>

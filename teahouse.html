@@ -102,8 +102,30 @@
     margin:0 0 8px;
     font-size:17px;
   }
-  .search-result p{margin:0; color:var(--ink-soft); max-width:66ch;}
+  .search-result .result-body{margin:0; color:var(--ink-soft); max-width:66ch;}
   .search-result .not-found{color:var(--red); font-weight:700;}
+
+  .menu-list{max-width:320px; margin:0 auto;}
+  .menu-section-title{
+    text-align:center;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:15px;
+    color:var(--wood-dark);
+    margin:16px 0 8px;
+    letter-spacing:.06em;
+  }
+  .menu-section-title:first-child{margin-top:0;}
+  .menu-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:7px 4px;
+    border-bottom:1px dashed var(--line);
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .menu-row:last-child{border-bottom:none;}
   .search-result .close-result{
     float:right;
     background:none;
@@ -222,7 +244,7 @@
   }
   .secret-gate.show{display:flex;}
   .secret-card{
-    max-width:420px;
+    max-width:540px;
     width:100%;
     text-align:center;
   }
@@ -281,6 +303,33 @@
   .secret-content{display:none;}
   .secret-content.show{display:block;}
   .secret-content p{color:#C9BB98; max-width:52ch; margin:0 auto 14px;}
+
+  .ledger-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:6px;
+    font-size:13.5px;
+  }
+  .ledger-table th{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:.05em;
+    color:#8C8272;
+    text-align:left;
+    padding:6px 10px;
+    border-bottom:1px solid #3A3730;
+  }
+  .ledger-table td{
+    padding:7px 10px;
+    color:#C9BB98;
+    border-bottom:1px solid #232320;
+    text-align:left;
+  }
+  .ledger-table tr.flagged td{
+    color:#C0453A;
+    font-weight:700;
+  }
 </style>
 </head>
 <body>
@@ -301,7 +350,7 @@
     <div class="wrap">
       <button class="close-result" id="closeResult">關閉 ✕</button>
       <h4 id="resultTitle"></h4>
-      <p id="resultBody"></p>
+      <div id="resultBody" class="result-body"></div>
     </div>
   </div>
 
@@ -392,8 +441,30 @@
       </div>
 
       <div class="secret-content" id="secretContent">
-        <h2>歡迎回來，老朋友。</h2>
-        <p>（此處為隱藏頁面內容，之後可置換為下一階段的解謎線索。）</p>
+        <h2>遊客名冊</h2>
+        <p>和善里茶樓・熟客登記簿</p>
+        <table class="ledger-table">
+          <thead>
+            <tr><th>姓名</th><th>電話</th><th>狀態</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>林淑芬</td><td>01-118-2093</td><td></td></tr>
+            <tr><td>陳建宏</td><td>01-225-6671</td><td></td></tr>
+            <tr><td>黃美玲</td><td>01-337-4820</td><td></td></tr>
+            <tr><td>張志明</td><td>01-442-1195</td><td></td></tr>
+            <tr><td>李佳蓁</td><td>01-556-7302</td><td></td></tr>
+            <tr><td>吳俊傑</td><td>01-663-8841</td><td></td></tr>
+            <tr><td>蔡雅婷</td><td>01-771-0296</td><td></td></tr>
+            <tr><td>劉承恩</td><td>01-889-5573</td><td></td></tr>
+            <tr><td>楊惠雯</td><td>01-902-6614</td><td></td></tr>
+            <tr><td>鄭文彬</td><td>01-013-7758</td><td></td></tr>
+            <tr><td>謝欣潔</td><td>01-124-3390</td><td></td></tr>
+            <tr class="flagged"><td>郭楷杰</td><td>01-238-4471</td><td>已登記</td></tr>
+            <tr><td>賴思妤</td><td>01-346-5589</td><td></td></tr>
+            <tr><td>曾柏宇</td><td>01-457-6602</td><td></td></tr>
+            <tr><td>洪千惠</td><td>01-561-7743</td><td></td></tr>
+          </tbody>
+        </table>
       </div>
 
       <button class="secret-close" id="secretCloseBtn">離開此頁面</button>
@@ -409,15 +480,27 @@
   var searchTopics = {
     "菜單": {
       title: "本店菜單",
-      body: "招牌品項：龍井茶、東方美人茶、桂花烏龍、芝麻包、蘿蔔糕、綠豆糕。（此區塊文字可替換為完整菜單與價位）"
+      html:
+        '<div class="menu-list">' +
+          '<h5 class="menu-section-title">特色好茶</h5>' +
+          '<div class="menu-row"><span>招牌龍井茶</span><span>25元</span></div>' +
+          '<div class="menu-row"><span>東方美人茶</span><span>35元</span></div>' +
+          '<div class="menu-row"><span>桂花烏龍</span><span>30元</span></div>' +
+          '<h5 class="menu-section-title">手作糕點</h5>' +
+          '<div class="menu-row"><span>芝麻包</span><span>7元/顆</span></div>' +
+          '<div class="menu-row"><span>紅豆包</span><span>7元/顆</span></div>' +
+          '<div class="menu-row"><span>奶黃包</span><span>9元/顆</span></div>' +
+        '</div>'
     },
     "龍井茶": {
       title: "龍井茶",
-      body: "本店嚴選在地龍井茶葉，茶湯清亮、回甘生津，是老饕們指定的招牌茶品，搭配和善里特有的山泉水沖泡，香氣格外清雅。"
+      html:
+        '<p>本店嚴選在地龍井茶葉，茶湯清亮、回甘生津，是老饕們指定的招牌茶品，搭配和善里特有的山泉水沖泡，香氣格外清雅。</p>' +
+        '<p style="margin-top:12px;">若要品味龍井茶的完整清香，必須靜下心來，放空性靈，觀茶餘熱氣裊裊3餘秒，清清嗅聞茶香5秒，手指輕撫杯緣2圈後，在8秒內喝下龍井茶，即在茶的甘美之中，品嘗人生的精粹。</p>'
     },
     "芝麻包": {
       title: "芝麻包",
-      body: "外皮酥脆、內餡香濃的招牌小點，每日限量手工製作，深受在地老饕喜愛。"
+      html: '<p>外皮酥脆、內餡香濃的招牌小點，每日限量手工製作，深受在地老饕喜愛。</p>'
     }
   };
 
@@ -428,10 +511,15 @@
   var resultBody = document.getElementById("resultBody");
   var closeResult = document.getElementById("closeResult");
 
-  function showResult(title, body, isNotFound){
+  function escapeHTML(str){
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function showResult(title, html){
     resultTitle.textContent = title;
-    resultBody.textContent = body;
-    resultBody.className = isNotFound ? "not-found" : "";
+    resultBody.innerHTML = html;
     searchResult.classList.add("show");
   }
 
@@ -440,6 +528,7 @@
   }
 
   closeResult.addEventListener("click", hideResult);
+
 
   searchForm.addEventListener("submit", function(e){
     e.preventDefault();
@@ -454,19 +543,19 @@
 
     if (searchTopics.hasOwnProperty(query)){
       var topic = searchTopics[query];
-      showResult(topic.title, topic.body, false);
+      showResult(topic.title, topic.html);
     } else if (query === ""){
       hideResult();
     } else {
-      showResult("搜尋結果", "並未找到「" + query + "」相關內容。", true);
+      showResult("搜尋結果", '<span class="not-found">並未找到「' + escapeHTML(query) + '」相關內容。</span>');
     }
   });
 
   /* ======================================================
      遊客名冊祕密頁面（密碼保護）
-     謎題設計者可自行修改下方密碼
+     密碼藏在「龍井茶」搜尋結果的品飲步驟裡（3 秒／5 秒／2 圈／8 秒 → 3528）
      ====================================================== */
-  var SECRET_PASSWORD = "品茗";
+  var SECRET_PASSWORD = "3528";
 
   var secretGate = document.getElementById("secretGate");
   var secretLocked = document.getElementById("secretLocked");

@@ -248,6 +248,23 @@
     color:#fff; font-weight:700; margin-right:6px; font-size:inherit; font-family:inherit;
   }
   .comment-list .comment-item .comment-author:hover{text-decoration:underline;}
+  .comment-list .comment-item .comment-badge{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    color:#8B8B8B;
+    border:1px solid #333;
+    border-radius:10px;
+    padding:1px 7px;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .comment-list .comment-item .comment-likes{
+    display:block;
+    font-size:12px;
+    color:#8B8B8B;
+    margin-top:2px;
+  }
   .comment-form{display:flex; gap:8px;}
   .comment-form input{
     flex:1;
@@ -415,15 +432,13 @@
     window.scrollTo({top:0, behavior:"auto"});
   }
 
-  /* ---------- 人文紀事說明視窗：全站只顯示一次 ---------- */
-  var STORIES_INTRO_KEY = "storiesIntroSeen";
+  /* ---------- 人文紀事說明視窗：同一次瀏覽只顯示一次 ---------- */
+  var introSeen = false;
   function hasSeenIntro(){
-    try { return localStorage.getItem(STORIES_INTRO_KEY) === "1"; }
-    catch (err){ return false; }
+    return introSeen;
   }
   function markIntroSeen(){
-    try { localStorage.setItem(STORIES_INTRO_KEY, "1"); }
-    catch (err){ /* 忽略無法寫入的情況 */ }
+    introSeen = true;
   }
 
   tabButtons.forEach(function(btn){
@@ -463,11 +478,11 @@
       stats: "20 位粉絲"
     },
     "linde_670607": {
-      name: "林應德（阿德叔）",
-      avatarLetter: "德",
-      bio: "老巷新聲主唱，本名林應德，街坊都叫他阿德叔。",
+      name: "林應德",
+      avatarImg: "assets/linde-avatar.jpg",
+      bio: "大家好我是林應德，大家可以叫我阿德叔",
       tags: [],
-      stats: ""
+      stats: "141 位粉絲・50 萬次最近瀏覽次數"
     },
     "jiaxinchen0802": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
     "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
@@ -501,7 +516,8 @@
   // 各帳號「串文」頁面顯示的公開貼文（key 為 handle）
   var profilePosts = {
     "wenlong_0707": ["p1", "p2"],
-    "williamchen0119": ["p3"]
+    "williamchen0119": ["p3"],
+    "linde_670607": ["p7", "p6", "p5", "p4"]
   };
   var postsById = {
     "p1": feedPosts[0],
@@ -511,6 +527,43 @@
       text:"我老爸叫我來這裡，搜集罪犯的資訊，剛剛看了一下發現這裡的人很亂，我會好好嚴查。",
       image:"assets/mingan-office.jpg",
       likes:19, commentCount:23,
+      comments:[],
+      allowNewComments:false
+    },
+    "p4": {
+      id:"p4", author:"linde_670607", time:"2026-4-3",
+      text:"大家好我是林應德，大家可以叫我阿德叔，聽說這裡有很多有趣的文章所以就請孩子幫我注册了一下，還請大家多多關照",
+      image:"assets/linde-lotus.jpg",
+      likes:4, commentCount:null,
+      comments:[],
+      allowNewComments:false
+    },
+    "p5": {
+      id:"p5", author:"linde_670607", time:"2026-8-8",
+      text:"阿德叔最近一直在種田，所以沒空發文。",
+      image:"assets/linde-farming.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:false
+    },
+    "p6": {
+      id:"p6", author:"linde_670607", time:"2026-8-31",
+      text:"阿德叔今天去看藍寶堅尼，不知道要買哪台，有人能給建議嗎？",
+      image:"assets/linde-lambo.jpg",
+      likes:null, commentCount:null,
+      comments:[
+        {author:"wenlong_0707", text:"你離世了以後，我叫你後代，用你的遺產買來燒給你。", likes:60},
+        {author:"linde_670607", text:"我先燒給你吧憨仔", likes:15},
+        {author:"wenlong_0707", text:"你比我早死。", likes:9},
+        {author:"linde_670607", text:"就不要你比我早死憨仔", likes:2}
+      ],
+      allowNewComments:false
+    },
+    "p7": {
+      id:"p7", author:"linde_670607", time:"2026-9-1",
+      text:"阿龍伯最近都找我去幫忙，那個老憨仔笨手笨腳的。",
+      image:null,
+      likes:null, commentCount:null,
       comments:[],
       allowNewComments:false
     }
@@ -587,7 +640,14 @@
     if (post.comments && post.comments.length){
       html += '<div class="comment-list">';
       post.comments.forEach(function(c){
-        html += '<div class="comment-item"><button type="button" class="comment-author" data-handle="' + c.author + '">' + escapeHTML(c.author) + '</button>' + escapeHTML(c.text) + '</div>';
+        var badge = (c.author === post.author) ? '<span class="comment-badge">作者</span>' : '';
+        var likes = (c.likes != null) ? '<span class="comment-likes">♥ ' + c.likes + '</span>' : '';
+        html += '<div class="comment-item">';
+        html += '<button type="button" class="comment-author" data-handle="' + c.author + '">' + escapeHTML(c.author) + '</button>';
+        html += badge;
+        html += escapeHTML(c.text);
+        html += likes;
+        html += '</div>';
       });
       html += '</div>';
     }

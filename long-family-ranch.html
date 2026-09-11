@@ -148,16 +148,15 @@
     letter-spacing:.04em;
     margin-bottom:8px;
   }
-  .booking-form textarea{
+  .booking-form input[type="text"],
+  .booking-form input[type="date"]{
     width:100%;
     font-family:var(--font-body);
     font-size:14.5px;
-    padding:14px;
+    padding:13px 14px;
     background:#F1EAD6;
     border:none;
     color:var(--ink);
-    min-height:96px;
-    resize:vertical;
     outline:none;
     margin-bottom:14px;
   }
@@ -172,19 +171,29 @@
     cursor:pointer;
   }
   .booking-form button:hover{background:#D8AE5E;}
+  .booking-confirm{
+    display:none;
+    margin:18px 0 0;
+    font-weight:700;
+    color:var(--gold);
+    font-size:15px;
+  }
+  .booking-confirm.show{display:block;}
 
   footer{padding:28px 0 44px; font-size:12px; color:#8C7A5E;}
 
-  /* ---------- 恐怖彩蛋：預約送出後 ---------- */
+  /* ---------- 恐怖彩蛋：預約送出後（漸變轉黑＋文字由左至右、由上而下填滿） ---------- */
   .dread-overlay{
-    display:none;
     position:fixed; inset:0;
     background:#000;
+    opacity:0;
     z-index:200;
     overflow:hidden;
     cursor:pointer;
+    pointer-events:none;
+    transition:opacity 1.1s ease;
   }
-  .dread-overlay.show{display:block;}
+  .dread-overlay.show{opacity:1; pointer-events:auto;}
   .dread-grid{
     position:absolute; inset:0;
     display:flex;
@@ -199,8 +208,10 @@
     font-weight:900;
     font-size:20px;
     white-space:nowrap;
-    opacity:.92;
+    opacity:0;
+    transition:opacity .35s ease;
   }
+  .dread-grid.reveal .dread-line{opacity:.92;}
   .dread-hint{
     position:absolute;
     left:0; right:0; bottom:26px;
@@ -277,12 +288,15 @@
   <section class="booking">
     <div class="wrap block">
       <h2>騎馬／擠奶體驗預約</h2>
-      <p class="note">請填寫您希望預約的日期、時段與體驗項目，我們會盡快與您確認。</p>
+      <p class="note">請填寫姓名與希望預約的日期，我們會盡快與您確認。</p>
       <form class="booking-form" id="bookingForm">
-        <label for="bookingMessage">預約資訊</label>
-        <textarea id="bookingMessage" placeholder="例如：9/20 上午 10:00，2 大 1 小，想體驗騎馬"></textarea>
+        <label for="bookingName">姓名</label>
+        <input type="text" id="bookingName" placeholder="請輸入姓名" required>
+        <label for="bookingDate">預約日期</label>
+        <input type="date" id="bookingDate" required>
         <button type="submit">送出預約</button>
       </form>
+      <p class="booking-confirm" id="bookingConfirm"></p>
     </div>
   </section>
 
@@ -298,31 +312,82 @@
 
 <script>
   var bookingForm = document.getElementById("bookingForm");
+  var nameInput = document.getElementById("bookingName");
+  var dateInput = document.getElementById("bookingDate");
+  var bookingConfirm = document.getElementById("bookingConfirm");
   var dreadOverlay = document.getElementById("dreadOverlay");
   var dreadGrid = document.getElementById("dreadGrid");
   var dreadHint = document.getElementById("dreadHint");
 
-  function fillDreadGrid(){
+  var SCARE_STORAGE_KEY = "ranchScareShown";
+  var LINE_COUNT = 70;
+  var LINE_STEP_MS = 30;
+
+  function hasScarePlayed(){
+    try { return localStorage.getItem(SCARE_STORAGE_KEY) === "1"; }
+    catch (err){ return false; }
+  }
+  function markScarePlayed(){
+    try { localStorage.setItem(SCARE_STORAGE_KEY, "1"); }
+    catch (err){ /* 忽略無法寫入的情況 */ }
+  }
+
+  function showConfirm(text){
+    bookingConfirm.textContent = text;
+    bookingConfirm.classList.add("show");
+  }
+
+  function buildDreadGrid(){
     var html = "";
-    for (var i = 0; i < 90; i++){
-      html += '<span class="dread-line">我們期待你的到來。</span>';
+    for (var i = 0; i < LINE_COUNT; i++){
+      html += '<span class="dread-line" style="transition-delay:' + (i * LINE_STEP_MS) + 'ms;">我們期待你的到來。</span>';
     }
     dreadGrid.innerHTML = html;
   }
 
-  bookingForm.addEventListener("submit", function(e){
-    e.preventDefault();
-    fillDreadGrid();
-    dreadOverlay.classList.add("show");
+  function playScare(){
+    buildDreadGrid();
+    dreadGrid.classList.remove("reveal");
     dreadHint.classList.remove("show");
+    dreadOverlay.classList.add("show");
+
+    // 畫面先漸變轉黑，再讓文字依序由左至右、由上而下填滿畫面
+    setTimeout(function(){
+      dreadGrid.classList.add("reveal");
+    }, 600);
+
+    var totalTextTime = LINE_COUNT * LINE_STEP_MS;
     setTimeout(function(){
       dreadHint.classList.add("show");
-    }, 2500);
+    }, 600 + totalTextTime + 700);
+
+    markScarePlayed();
+  }
+
+  bookingForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = nameInput.value.trim();
+
+    if (name === "郭楷杰"){
+      showConfirm("您已完成預約，謝謝。");
+      bookingForm.reset();
+      return;
+    }
+
+    if (hasScarePlayed()){
+      showConfirm("您已完成預約。");
+      bookingForm.reset();
+      return;
+    }
+
+    playScare();
   });
 
   dreadOverlay.addEventListener("click", function(){
     dreadOverlay.classList.remove("show");
+    dreadGrid.classList.remove("reveal");
     bookingForm.reset();
+    showConfirm("您已完成預約。");
   });
 </script>
 

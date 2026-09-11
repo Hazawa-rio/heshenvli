@@ -183,8 +183,45 @@
     padding:18px;
     box-shadow:0 10px 26px rgba(0,0,0,.22);
   }
+
+  .feed-search{margin-bottom:16px;}
+  .feed-search form{display:flex; gap:8px;}
+  .feed-search input{
+    flex:1;
+    background:#1B1B1D;
+    border:1px solid #2C2C2E;
+    color:#fff;
+    padding:9px 13px;
+    border-radius:20px;
+    font-size:13.5px;
+    outline:none;
+  }
+  .feed-search input:focus{border-color:#555;}
+  .feed-search button{
+    background:#2C2C2E;
+    color:#EDEDED;
+    border:none;
+    padding:0 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .feed-search button:hover{background:#3A3A3C;}
+  .search-note{font-size:13px; color:#8B8B8B; margin:2px 2px 14px;}
+
+  .feed-posts{display:flex; flex-direction:column; gap:22px;}
+  .feed-post + .feed-post{padding-top:22px; border-top:1px solid #1E1E20;}
+
   .post-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-  .post-avatar{width:36px; height:36px; border-radius:50%; object-fit:cover;}
+  .post-avatar{width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0;}
+  .avatar-letter{
+    width:36px; height:36px; border-radius:50%; flex-shrink:0;
+    background:#2C2C2E; color:#B8893F;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:700; font-size:14px;
+  }
+  .profile-avatar.avatar-letter{width:56px; height:56px; font-size:20px;}
   .post-who{display:flex; flex-direction:column;}
   .post-username{
     background:none; border:none; color:#fff; font-weight:700; font-size:14px;
@@ -194,23 +231,23 @@
   .post-username.static{cursor:default;}
   .post-username.static:hover{text-decoration:none;}
   .post-time{font-size:12px; color:#8B8B8B;}
-  .post-text{font-size:14.5px; margin:0 0 12px; color:#F2F2F2; max-width:none;}
-  .post-photo{width:100%; border-radius:10px; margin-bottom:10px;}
-  .post-ai-tag{
-    display:inline-block;
-    font-size:11px;
-    color:#8B8B8B;
-    border:1px solid #333;
-    padding:2px 9px;
-    border-radius:20px;
-    margin-bottom:12px;
+  .post-text{font-size:14.5px; margin:0 0 12px; color:#fff; max-width:none; white-space:pre-line;}
+  .post-text .mention{
+    background:none; border:none; padding:0; cursor:pointer;
+    color:#7FB2FF; font-size:inherit; font-family:inherit;
   }
+  .post-text .mention:hover{text-decoration:underline;}
+  .post-photo{width:100%; border-radius:10px; margin-bottom:10px;}
   .post-actions{display:flex; gap:18px; color:#C7C7C7; font-size:14px; margin-bottom:14px;}
 
   .comment-box{border-top:1px solid #232323; padding-top:12px;}
   .comment-list{display:flex; flex-direction:column; gap:8px; margin-bottom:10px;}
-  .comment-list .comment-item{font-size:13.5px; color:#DADADA;}
-  .comment-list .comment-item b{color:#fff; margin-right:6px; font-weight:700;}
+  .comment-list .comment-item{font-size:13.5px; color:#fff;}
+  .comment-list .comment-item .comment-author{
+    background:none; border:none; padding:0; cursor:pointer;
+    color:#fff; font-weight:700; margin-right:6px; font-size:inherit; font-family:inherit;
+  }
+  .comment-list .comment-item .comment-author:hover{text-decoration:underline;}
   .comment-form{display:flex; gap:8px;}
   .comment-form input{
     flex:1;
@@ -241,25 +278,21 @@
   .profile-avatar{width:56px; height:56px; border-radius:50%; object-fit:cover;}
   .profile-head h3{margin:0; font-size:16px; font-family:var(--font-display); color:#fff;}
   .profile-handle{font-size:12.5px; color:#8B8B8B;}
-  .profile-bio{font-size:13.5px; color:#D5D5D5; margin:0 0 14px; max-width:none;}
+  .profile-bio{font-size:13.5px; color:#fff; margin:0 0 14px; max-width:none;}
   .profile-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
   .profile-tags .tag{
     display:inline-flex; align-items:center; gap:5px;
-    background:#1B1B1D; border:1px solid #2C2C2E; color:#D5D5D5;
+    background:#1B1B1D; border:1px solid #2C2C2E; color:#EDEDED;
     font-size:12px; padding:5px 12px; border-radius:20px;
   }
   .dot{width:7px; height:7px; border-radius:50%; display:inline-block;}
   .dot.orange{background:#E07B39;}
   .dot.red{background:#C0453A;}
-  .profile-stats{font-size:12.5px; color:#8B8B8B; margin-bottom:14px;}
-  .profile-buttons{display:flex; gap:10px; margin-bottom:18px;}
-  .btn-outline{
-    flex:1; background:none; border:1px solid #3A3A3C; color:#EDEDED;
-    padding:9px; border-radius:8px; font-size:13px; font-weight:700; cursor:default;
-  }
+  .profile-stats{font-size:12.5px; color:#8B8B8B; margin-bottom:18px;}
   .profile-subnav{display:flex; gap:18px; border-bottom:1px solid #232323; margin-bottom:16px; font-size:13px; color:#8B8B8B;}
   .profile-subnav span{padding-bottom:10px;}
   .profile-subnav span.active{color:#fff; font-weight:700; border-bottom:2px solid #fff;}
+  .profile-empty{font-size:13px; color:#8B8B8B; padding:6px 0;}
 </style>
 </head>
 <body>
@@ -321,88 +354,21 @@
         <div class="panel-rule"></div>
 
         <div class="feed-app" id="feedApp">
+          <div class="feed-search">
+            <form id="storySearchForm" autocomplete="off">
+              <input type="text" id="storySearchInput" placeholder="搜尋貼文關鍵字…" aria-label="搜尋貼文">
+              <button type="submit">搜尋</button>
+            </form>
+          </div>
+
           <!-- 動態頁面：貼文列表 -->
-          <div id="feedView">
-            <article>
-              <header class="post-head">
-                <img class="post-avatar" src="assets/wenlong-avatar.jpg" alt="wenlong_0707 頭像">
-                <div class="post-who">
-                  <button type="button" class="post-username" id="openProfileBtn">wenlong_0707</button>
-                  <span class="post-time">12小時</span>
-                </div>
-              </header>
-              <p class="post-text">阿龍伯，去牧場玩。</p>
-              <img class="post-photo" src="assets/wenlong-ranch-post.jpg" alt="阿龍伯在長家觀光牧場">
-              <span class="post-ai-tag">AI 內容</span>
-              <div class="post-actions">
-                <span>♥ 24</span>
-                <span>💬 24</span>
-                <span>⟲</span>
-                <span>➤</span>
-              </div>
+          <div id="feedView"></div>
 
-              <div class="comment-box">
-                <div class="comment-list" id="commentList"></div>
-                <form class="comment-form" id="commentForm">
-                  <input type="text" id="commentInput" placeholder="留言…" maxlength="120" aria-label="留言">
-                  <button type="submit">送出</button>
-                </form>
-              </div>
-            </article>
-          </div>
+          <!-- 動態頁面：帳號個人頁 -->
+          <div id="profileView" hidden></div>
 
-          <!-- 動態頁面：wenlong_0707 個人頁 -->
-          <div id="profileView" hidden>
-            <button type="button" class="back-btn" id="backToFeedBtn">← 返回動態</button>
-            <div class="profile-head">
-              <img class="profile-avatar" src="assets/wenlong-avatar.jpg" alt="陳文龍頭像">
-              <div>
-                <h3>陳文龍（阿龍伯）</h3>
-                <span class="profile-handle">wenlong_0707</span>
-              </div>
-            </div>
-            <p class="profile-bio">
-              我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。
-              曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。
-              人生賺，像我最愛的姿勢一樣：比個「耶」就過去了！
-            </p>
-            <div class="profile-tags">
-              <span class="tag">廚藝</span>
-              <span class="tag"><i class="dot orange"></i>籃球</span>
-              <span class="tag"><i class="dot red"></i>棒球</span>
-              <span class="tag">種花</span>
-              <span class="tag">茶藝</span>
-            </div>
-            <div class="profile-stats">487 位粉絲・55 萬次最近瀏覽次數</div>
-            <div class="profile-buttons">
-              <button type="button" class="btn-outline" disabled>追蹤中</button>
-              <button type="button" class="btn-outline" disabled>發送訊息</button>
-            </div>
-            <div class="profile-subnav">
-              <span class="active">串文</span>
-              <span>回覆</span>
-              <span>影音內容</span>
-              <span>轉發</span>
-            </div>
-            <article>
-              <header class="post-head">
-                <img class="post-avatar" src="assets/wenlong-avatar.jpg" alt="wenlong_0707 頭像">
-                <div class="post-who">
-                  <span class="post-username static">wenlong_0707</span>
-                  <span class="post-time">12小時</span>
-                </div>
-              </header>
-              <p class="post-text">阿龍伯，去牧場玩。</p>
-              <img class="post-photo" src="assets/wenlong-ranch-post.jpg" alt="阿龍伯在長家觀光牧場">
-              <span class="post-ai-tag">AI 內容</span>
-              <div class="post-actions">
-                <span>♥ 24</span>
-                <span>💬 24</span>
-                <span>⟲</span>
-                <span>➤</span>
-              </div>
-            </article>
-          </div>
+          <!-- 動態頁面：搜尋結果 -->
+          <div id="searchResultView" hidden></div>
         </div>
       </section>
 
@@ -439,11 +405,6 @@
   var storiesModal = document.getElementById("storiesModal");
   var storiesConfirm = document.getElementById("storiesConfirm");
 
-  var feedView = document.getElementById("feedView");
-  var profileView = document.getElementById("profileView");
-  var openProfileBtn = document.getElementById("openProfileBtn");
-  var backToFeedBtn = document.getElementById("backToFeedBtn");
-
   function activateTab(tabId){
     tabButtons.forEach(function(btn){
       btn.setAttribute("aria-selected", btn.getAttribute("data-tab") === tabId ? "true" : "false");
@@ -454,13 +415,25 @@
     window.scrollTo({top:0, behavior:"auto"});
   }
 
+  /* ---------- 人文紀事說明視窗：全站只顯示一次 ---------- */
+  var STORIES_INTRO_KEY = "storiesIntroSeen";
+  function hasSeenIntro(){
+    try { return localStorage.getItem(STORIES_INTRO_KEY) === "1"; }
+    catch (err){ return false; }
+  }
+  function markIntroSeen(){
+    try { localStorage.setItem(STORIES_INTRO_KEY, "1"); }
+    catch (err){ /* 忽略無法寫入的情況 */ }
+  }
+
   tabButtons.forEach(function(btn){
     btn.addEventListener("click", function(){
       var tabId = btn.getAttribute("data-tab");
       if (tabId === "stories"){
-        profileView.hidden = true;
-        feedView.hidden = false;
-        storiesModal.classList.add("show");
+        showFeed();
+        if (!hasSeenIntro()){
+          storiesModal.classList.add("show");
+        }
       }
       activateTab(tabId);
     });
@@ -468,38 +441,303 @@
 
   storiesConfirm.addEventListener("click", function(){
     storiesModal.classList.remove("show");
+    markIntroSeen();
   });
 
-  /* ---------- 人文紀事：貼文 ↔ 個人頁切換 ---------- */
-  openProfileBtn.addEventListener("click", function(){
+  /* ======================================================
+     人文紀事：帳號與貼文資料
+     ====================================================== */
+  var accounts = {
+    "wenlong_0707": {
+      name: "陳文龍（阿龍伯）",
+      avatarImg: "assets/wenlong-avatar.jpg",
+      bio: "我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。人生賺，像我最愛的姿勢一樣：比個「耶」就過去了！",
+      tags: [{label:"廚藝"}, {label:"籃球", dot:"orange"}, {label:"棒球", dot:"red"}, {label:"種花"}, {label:"茶藝"}],
+      stats: "487 位粉絲・55 萬次最近瀏覽次數"
+    },
+    "williamchen0119": {
+      name: "陳明安",
+      avatarImg: "assets/mingan-avatar.jpg",
+      bio: "我是大安分局局長陳明安。在此聲明，我的執法標準只有一條：法律與秩序，絕無模糊空間。職責所在，我不習慣客套，更不會開玩笑。絕不容許正義被捷徑或私權歪曲；維持公平與秩序，是我對這個社會唯一承諾的底線。",
+      tags: [{label:"打擊犯罪"}],
+      stats: "20 位粉絲"
+    },
+    "linde_670607": {
+      name: "林應德（阿德叔）",
+      avatarLetter: "德",
+      bio: "老巷新聲主唱，本名林應德，街坊都叫他阿德叔。",
+      tags: [],
+      stats: ""
+    },
+    "jiaxinchen0802": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "chen_wanglin": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "daojin.chen": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""}
+  };
+
+  // 公開動態牆（依時間新到舊）
+  var feedPosts = [
+    {
+      id:"p1", author:"wenlong_0707", time:"12小時",
+      text:"阿龍伯，去牧場玩。",
+      image:"assets/wenlong-ranch-post.jpg",
+      likes:24, commentCount:24,
+      comments:[
+        {author:"linde_670607", text:"老憨仔，怎麼沒有被馬踹飛。"},
+        {author:"wenlong_0707", text:"先踹飛你，去見令堂，阿德叔。"}
+      ],
+      allowNewComments:true
+    },
+    {
+      id:"p2", author:"wenlong_0707", time:"2天",
+      text:"阿龍伯，幫我的五個孩子，拍一張合照。\n女兒，可能還要再，之後才會創threads。\n@jiaxinchen0802 @chengingtsai16888 @chen_wanglin @daojin.chen @williamchen0119",
+      image:"assets/wenlong-sons-photo.jpg",
+      likes:31, commentCount:6,
+      comments:[],
+      allowNewComments:false
+    }
+  ];
+
+  // 各帳號「串文」頁面顯示的公開貼文（key 為 handle）
+  var profilePosts = {
+    "wenlong_0707": ["p1", "p2"],
+    "williamchen0119": ["p3"]
+  };
+  var postsById = {
+    "p1": feedPosts[0],
+    "p2": feedPosts[1],
+    "p3": {
+      id:"p3", author:"williamchen0119", time:"1天",
+      text:"我老爸叫我來這裡，搜集罪犯的資訊，剛剛看了一下發現這裡的人很亂，我會好好嚴查。",
+      image:"assets/mingan-office.jpg",
+      likes:19, commentCount:23,
+      comments:[],
+      allowNewComments:false
+    }
+  };
+
+  // 不公開貼文：只能透過搜尋關鍵字找到，不會出現在動態牆或個人頁
+  var hiddenPosts = [
+    {
+      id:"h1", author:"williamchen0119", time:"3天前",
+      text:"今天阿爸有來送飯，吃完後繼續處理工作。\n2026/9/5 收到報案說21歲的郭楷杰在和善里失蹤，局長叫我不要放出來，會讓人家恐慌，我一定會把人找出來。",
+      image:"assets/mingan-night-desk.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:false
+    }
+  ];
+
+  var feedApp = document.getElementById("feedApp");
+  var feedView = document.getElementById("feedView");
+  var profileView = document.getElementById("profileView");
+  var searchResultView = document.getElementById("searchResultView");
+
+  function escapeHTML(str){
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderAvatar(handle, sizeClass){
+    var acc = accounts[handle];
+    if (!acc) return "";
+    var cls = sizeClass || "post-avatar";
+    if (acc.avatarImg){
+      return '<img class="' + cls + '" src="' + acc.avatarImg + '" alt="' + escapeHTML(handle) + ' 頭像">';
+    }
+    var letter = acc.avatarLetter || handle.charAt(0).toUpperCase();
+    return '<div class="' + cls + ' avatar-letter">' + escapeHTML(letter) + '</div>';
+  }
+
+  function linkifyText(text){
+    var escaped = escapeHTML(text);
+    return escaped.replace(/@([A-Za-z0-9_.]+)/g, function(match, handle){
+      if (accounts.hasOwnProperty(handle)){
+        return '<button type="button" class="mention" data-handle="' + handle + '">@' + handle + '</button>';
+      }
+      return match;
+    });
+  }
+
+  function renderPost(post, opts){
+    opts = opts || {};
+    var acc = accounts[post.author] || {name: post.author};
+    var html = '<article class="feed-post">';
+    html += '<header class="post-head">';
+    html += renderAvatar(post.author);
+    html += '<div class="post-who">';
+    if (opts.staticAuthor){
+      html += '<span class="post-username static">' + escapeHTML(post.author) + '</span>';
+    } else {
+      html += '<button type="button" class="post-username" data-handle="' + post.author + '">' + escapeHTML(post.author) + '</button>';
+    }
+    html += '<span class="post-time">' + escapeHTML(post.time) + '</span>';
+    html += '</div></header>';
+    html += '<p class="post-text">' + linkifyText(post.text) + '</p>';
+    if (post.image){
+      html += '<img class="post-photo" src="' + post.image + '" alt="' + escapeHTML(acc.name || post.author) + '的貼文照片">';
+    }
+    html += '<div class="post-actions">';
+    html += '<span>♥' + (post.likes != null ? " " + post.likes : "") + '</span>';
+    html += '<span>💬' + (post.commentCount != null ? " " + post.commentCount : "") + '</span>';
+    html += '<span>⟲</span><span>➤</span>';
+    html += '</div>';
+
+    if (post.comments && post.comments.length){
+      html += '<div class="comment-list">';
+      post.comments.forEach(function(c){
+        html += '<div class="comment-item"><button type="button" class="comment-author" data-handle="' + c.author + '">' + escapeHTML(c.author) + '</button>' + escapeHTML(c.text) + '</div>';
+      });
+      html += '</div>';
+    }
+
+    if (post.allowNewComments){
+      html += '<div class="comment-box">';
+      html += '<div class="comment-list new-comments" data-post-id="' + post.id + '"></div>';
+      html += '<form class="comment-form" data-post-id="' + post.id + '">';
+      html += '<input type="text" placeholder="留言…" maxlength="120" aria-label="留言">';
+      html += '<button type="submit">送出</button>';
+      html += '</form></div>';
+    }
+
+    html += '</article>';
+    return html;
+  }
+
+  function renderFeed(){
+    var html = '<div class="feed-posts">';
+    feedPosts.forEach(function(post){
+      html += renderPost(post);
+    });
+    html += '</div>';
+    feedView.innerHTML = html;
+    bindDynamicHandlers(feedView);
+  }
+
+  function renderProfile(handle){
+    var acc = accounts[handle];
+    if (!acc) return;
+    var html = '<button type="button" class="back-btn" data-back="feed">← 返回動態</button>';
+    html += '<div class="profile-head">';
+    html += renderAvatar(handle, "profile-avatar");
+    html += '<div><h3>' + escapeHTML(acc.name || handle) + '</h3><span class="profile-handle">' + escapeHTML(handle) + '</span></div>';
+    html += '</div>';
+    html += '<p class="profile-bio">' + escapeHTML(acc.bio || "") + '</p>';
+
+    if (acc.tags && acc.tags.length){
+      html += '<div class="profile-tags">';
+      acc.tags.forEach(function(t){
+        html += '<span class="tag">' + (t.dot ? '<i class="dot ' + t.dot + '"></i>' : '') + escapeHTML(t.label) + '</span>';
+      });
+      html += '</div>';
+    }
+
+    if (acc.stats){
+      html += '<div class="profile-stats">' + escapeHTML(acc.stats) + '</div>';
+    }
+
+    html += '<div class="profile-subnav"><span class="active">串文</span><span>回覆</span><span>影音內容</span><span>轉發</span></div>';
+
+    var ids = profilePosts[handle] || [];
+    if (ids.length){
+      html += '<div class="feed-posts">';
+      ids.forEach(function(id){
+        html += renderPost(postsById[id], {staticAuthor:true});
+      });
+      html += '</div>';
+    } else {
+      html += '<p class="profile-empty">目前尚無公開貼文。</p>';
+    }
+
+    profileView.innerHTML = html;
+    bindDynamicHandlers(profileView);
+  }
+
+  function renderSearchResults(query, matches){
+    var html = '<button type="button" class="back-btn" data-back="feed">← 返回動態</button>';
+    if (!matches.length){
+      html += '<p class="profile-empty">找不到與「' + escapeHTML(query) + '」相關的貼文。</p>';
+    } else {
+      html += '<div class="feed-posts">';
+      matches.forEach(function(post){
+        html += renderPost(post, {staticAuthor:false});
+      });
+      html += '</div>';
+    }
+    searchResultView.innerHTML = html;
+    bindDynamicHandlers(searchResultView);
+  }
+
+  function bindDynamicHandlers(container){
+    container.querySelectorAll("[data-handle]").forEach(function(el){
+      el.addEventListener("click", function(){
+        openProfile(el.getAttribute("data-handle"));
+      });
+    });
+    container.querySelectorAll("[data-back]").forEach(function(el){
+      el.addEventListener("click", showFeed);
+    });
+    container.querySelectorAll(".comment-form").forEach(function(form){
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        var input = form.querySelector("input");
+        var text = input.value.trim();
+        if (text === "") return;
+        var postId = form.getAttribute("data-post-id");
+        var list = container.querySelector('.new-comments[data-post-id="' + postId + '"]');
+        if (list){
+          var item = document.createElement("div");
+          item.className = "comment-item";
+          var who = document.createElement("b");
+          who.textContent = "你";
+          who.style.marginRight = "6px";
+          item.appendChild(who);
+          item.appendChild(document.createTextNode(text));
+          list.appendChild(item);
+        }
+        input.value = "";
+      });
+    });
+  }
+
+  function showFeed(){
+    feedView.hidden = false;
+    profileView.hidden = true;
+    searchResultView.hidden = true;
+    if (!feedView.innerHTML){
+      renderFeed();
+    }
+  }
+
+  function openProfile(handle){
+    if (!accounts[handle]) return;
+    renderProfile(handle);
     feedView.hidden = true;
     profileView.hidden = false;
-  });
-  backToFeedBtn.addEventListener("click", function(){
-    profileView.hidden = true;
-    feedView.hidden = false;
-  });
+    searchResultView.hidden = true;
+  }
 
-  /* ---------- 留言（僅存在於當前畫面，重新整理即消失） ---------- */
-  var commentForm = document.getElementById("commentForm");
-  var commentInput = document.getElementById("commentInput");
-  var commentList = document.getElementById("commentList");
+  /* ---------- 搜尋：只用於捕捉不公開貼文的關鍵字 ---------- */
+  var storySearchForm = document.getElementById("storySearchForm");
+  var storySearchInput = document.getElementById("storySearchInput");
 
-  commentForm.addEventListener("submit", function(e){
+  storySearchForm.addEventListener("submit", function(e){
     e.preventDefault();
-    var text = commentInput.value.trim();
-    if (text === "") return;
+    var query = storySearchInput.value.trim();
+    if (query === "") return;
 
-    var item = document.createElement("div");
-    item.className = "comment-item";
-    var who = document.createElement("b");
-    who.textContent = "你";
-    item.appendChild(who);
-    item.appendChild(document.createTextNode(text));
-    commentList.appendChild(item);
+    var matches = hiddenPosts.filter(function(post){
+      return post.text.indexOf(query) !== -1;
+    });
 
-    commentInput.value = "";
+    renderSearchResults(query, matches);
+    feedView.hidden = true;
+    profileView.hidden = true;
+    searchResultView.hidden = false;
   });
+
+  renderFeed();
 </script>
 
 </body>

@@ -404,17 +404,15 @@
   var dreadGrid = document.getElementById("dreadGrid");
   var dreadHint = document.getElementById("dreadHint");
 
-  var SCARE_STORAGE_KEY = "ranchScareShown";
+  var scarePlayed = false;
   var LINE_COUNT = 70;
   var LINE_STEP_MS = 30;
 
   function hasScarePlayed(){
-    try { return localStorage.getItem(SCARE_STORAGE_KEY) === "1"; }
-    catch (err){ return false; }
+    return scarePlayed;
   }
   function markScarePlayed(){
-    try { localStorage.setItem(SCARE_STORAGE_KEY, "1"); }
-    catch (err){ /* 忽略無法寫入的情況 */ }
+    scarePlayed = true;
   }
 
   function showConfirm(text){

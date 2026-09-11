@@ -320,6 +320,19 @@
     .content-grid{grid-template-columns:1fr;}
   }
 
+  .tour-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:26px;
+    margin-top:34px;
+  }
+  @media (max-width:900px){
+    .tour-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .tour-grid{grid-template-columns:1fr;}
+  }
+
   .list-block{
     border-top:1px solid var(--line);
     padding:18px 0;
@@ -340,6 +353,7 @@
     margin-bottom:4px;
   }
   .shop-card h3{margin-bottom:8px;}
+  .shop-card p{font-size:14.5px;}
   .shop-link{
     display:inline-block;
     color:var(--pine);
@@ -597,20 +611,31 @@
   <section class="page" id="page-tour">
     <span class="eyebrow-tag">導覽</span>
     <h1>路線與景點導覽</h1>
-    <p>提供步行路線、景點介紹與地圖，以下為版面示範。</p>
-    <div class="content-grid" style="margin-top:34px;">
-      <div class="photo-slot" style="min-height:280px;"><span>導覽地圖／可替換</span></div>
-      <div>
-        <div class="list-block">
-          <div class="meta">路線一</div>
-          <h3>和善步道</h3>
-          <p>路線介紹文字可替換，例如里程、難度、預估時間。</p>
+    <p>和善里值得走訪的三個地方</p>
+    <div class="tour-grid">
+      <div class="shop-card">
+        <div class="photo-slot" style="padding:0;">
+          <img src="assets/grocery-store.jpg" alt="阿崑伯ㄟ店" width="1024" height="1024" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
         </div>
-        <div class="list-block">
-          <div class="meta">路線二</div>
-          <h3>老街巡禮</h3>
-          <p>路線介紹文字可替換。</p>
+        <div class="meta">雜貨店</div>
+        <h3>阿崑伯ㄟ店</h3>
+        <p>自 1923 年營業至今的老雜貨店，賣著南北雜貨與古早味零食。老闆阿崑伯是里民口中最熟悉的鄰居，店門口那張長板凳，是街坊話家常的固定場所。</p>
+      </div>
+      <div class="shop-card">
+        <div class="photo-slot" style="padding:0;">
+          <img src="assets/ranch.jpg" alt="長家觀光牧場" width="1024" height="671" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
         </div>
+        <div class="meta">觀光牧場</div>
+        <h3>長家觀光牧場</h3>
+        <a href="long-family-ranch.html" class="shop-link">步道、騎馬、擠奶體驗，點擊進入官網。</a>
+      </div>
+      <div class="shop-card">
+        <div class="photo-slot" style="padding:0;">
+          <img src="assets/culture-hall.jpg" alt="和善里文化展館" width="1024" height="559" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="meta">文化展館</div>
+        <h3>和善里文化展館</h3>
+        <a href="culture-hall.html" class="shop-link">認識和善里的百年故事，點擊進入官網。</a>
       </div>
     </div>
   </section>

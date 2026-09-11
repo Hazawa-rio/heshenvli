@@ -231,7 +231,7 @@
   .post-username.static{cursor:default;}
   .post-username.static:hover{text-decoration:none;}
   .post-time{font-size:12px; color:#8B8B8B;}
-  .post-text{font-size:14.5px; margin:0 0 12px; color:#fff; max-width:none; white-space:pre-line;}
+  .feed-app .post-text{font-size:14.5px; margin:0 0 12px; color:#fff; max-width:none; white-space:pre-line;}
   .post-text .mention{
     background:none; border:none; padding:0; cursor:pointer;
     color:#7FB2FF; font-size:inherit; font-family:inherit;
@@ -295,7 +295,7 @@
   .profile-avatar{width:56px; height:56px; border-radius:50%; object-fit:cover;}
   .profile-head h3{margin:0; font-size:16px; font-family:var(--font-display); color:#fff;}
   .profile-handle{font-size:12.5px; color:#8B8B8B;}
-  .profile-bio{font-size:13.5px; color:#fff; margin:0 0 14px; max-width:none;}
+  .feed-app .profile-bio{font-size:13.5px; color:#fff; margin:0 0 14px; max-width:none;}
   .profile-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
   .profile-tags .tag{
     display:inline-flex; align-items:center; gap:5px;
@@ -509,7 +509,7 @@
       image:"assets/wenlong-sons-photo.jpg",
       likes:31, commentCount:6,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     }
   ];
 
@@ -528,7 +528,7 @@
       image:"assets/mingan-office.jpg",
       likes:19, commentCount:23,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     },
     "p4": {
       id:"p4", author:"linde_670607", time:"2026-4-3",
@@ -536,7 +536,7 @@
       image:"assets/linde-lotus.jpg",
       likes:4, commentCount:null,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     },
     "p5": {
       id:"p5", author:"linde_670607", time:"2026-8-8",
@@ -544,7 +544,7 @@
       image:"assets/linde-farming.jpg",
       likes:null, commentCount:null,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     },
     "p6": {
       id:"p6", author:"linde_670607", time:"2026-8-31",
@@ -557,7 +557,7 @@
         {author:"wenlong_0707", text:"你比我早死。", likes:9},
         {author:"linde_670607", text:"就不要你比我早死憨仔", likes:2}
       ],
-      allowNewComments:false
+      allowNewComments:true
     },
     "p7": {
       id:"p7", author:"linde_670607", time:"2026-9-1",
@@ -565,7 +565,7 @@
       image:null,
       likes:null, commentCount:null,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     }
   };
 
@@ -577,7 +577,7 @@
       image:"assets/mingan-night-desk.jpg",
       likes:null, commentCount:null,
       comments:[],
-      allowNewComments:false
+      allowNewComments:true
     }
   ];
 
@@ -729,6 +729,35 @@
     bindDynamicHandlers(searchResultView);
   }
 
+  function createCommentElement(opts){
+    var item = document.createElement("div");
+    item.className = "comment-item";
+
+    if (opts.handle && accounts[opts.handle]){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "comment-author";
+      btn.textContent = opts.handle;
+      btn.addEventListener("click", function(){ openProfile(opts.handle); });
+      item.appendChild(btn);
+    } else {
+      var span = document.createElement("b");
+      span.textContent = opts.authorLabel || "你";
+      span.style.marginRight = "6px";
+      item.appendChild(span);
+    }
+
+    item.appendChild(document.createTextNode(opts.text));
+
+    if (opts.likes != null){
+      var likesEl = document.createElement("span");
+      likesEl.className = "comment-likes";
+      likesEl.textContent = "♥ " + opts.likes;
+      item.appendChild(likesEl);
+    }
+    return item;
+  }
+
   function bindDynamicHandlers(container){
     container.querySelectorAll("[data-handle]").forEach(function(el){
       el.addEventListener("click", function(){
@@ -744,19 +773,35 @@
         var input = form.querySelector("input");
         var text = input.value.trim();
         if (text === "") return;
+
         var postId = form.getAttribute("data-post-id");
         var list = container.querySelector('.new-comments[data-post-id="' + postId + '"]');
-        if (list){
-          var item = document.createElement("div");
-          item.className = "comment-item";
-          var who = document.createElement("b");
-          who.textContent = "你";
-          who.style.marginRight = "6px";
-          item.appendChild(who);
-          item.appendChild(document.createTextNode(text));
-          list.appendChild(item);
-        }
+        if (!list) return;
+
+        list.appendChild(createCommentElement({authorLabel:"你", text:text}));
         input.value = "";
+
+        // ---- 特定貼文留下特定關鍵字，可能會觸發回覆 ----
+        // 在對應貼文的 autoReplies 陣列中新增 {trigger, author, text} 即可設定
+        var post = postsById[postId];
+        if (post && post.autoReplies && post.autoReplies.length){
+          var matched = null;
+          for (var i = 0; i < post.autoReplies.length; i++){
+            if (post.autoReplies[i].trigger === text){
+              matched = post.autoReplies[i];
+              break;
+            }
+          }
+          if (matched){
+            setTimeout(function(){
+              list.appendChild(createCommentElement({
+                handle: matched.author,
+                text: matched.text,
+                likes: matched.likes
+              }));
+            }, 800);
+          }
+        }
       });
     });
   }

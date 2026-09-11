@@ -8,15 +8,15 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F3EFE4;
-    --panel:#FBF8EF;
-    --ink:#2B2A20;
-    --ink-soft:#56503E;
-    --barn:#7A3B32;
-    --barn-dark:#4A231D;
+    --bg:#F1ECDD;
+    --paper:#FBF7EC;
+    --ink:#2E2A1F;
+    --ink-soft:#5C543F;
+    --wood:#6B4226;
+    --wood-dark:#432A18;
     --pasture:#4B6B43;
     --pasture-dark:#33492E;
     --gold:#C79A46;
@@ -35,152 +35,229 @@
   }
   a{color:inherit;}
   img{max-width:100%;display:block;}
-  :focus-visible{outline:2.5px solid var(--barn); outline-offset:3px;}
+  :focus-visible{outline:2.5px solid var(--wood); outline-offset:3px;}
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
 
   .wrap{max-width:980px; margin:0 auto; padding:0 24px;}
 
-  .topbar{
-    background:var(--pasture-dark);
-    color:#F1EAD6;
-  }
-  .topbar .wrap{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:16px 24px;
-  }
-  .brand{
-    font-family:var(--font-display);
+  /* ---------- 極簡返回列（不用深色頂バー，跟茶樓做出區隔） ---------- */
+  .topline{padding:14px 24px;}
+  .topline a{
+    font-size:13px;
     font-weight:700;
-    font-size:19px;
-    letter-spacing:.03em;
+    color:var(--pasture-dark);
+    text-decoration:none;
   }
-  .brand span{color:var(--gold);}
+  .topline a:hover{color:var(--wood);}
 
-  /* ---------- Hero ---------- */
-  .ranch-hero{
-    position:relative;
-    min-height:360px;
+  /* ---------- Hero：滿版照片，不壓文字 ---------- */
+  .ranch-photo{
+    width:100%;
+    height:min(52vw, 420px);
+    object-fit:cover;
+  }
+
+  /* 木牌招牌，疊在照片下緣，模仿牧場入口吊牌 */
+  .signpost-wrap{
     display:flex;
-    align-items:flex-end;
-    background-size:cover;
-    background-position:center;
+    justify-content:center;
+    margin-top:-46px;
+    position:relative;
+    z-index:2;
+    padding:0 20px;
   }
-  .ranch-hero::after{
+  .signpost{
+    background:var(--wood);
+    color:#F3E6CE;
+    padding:16px 34px;
+    border:3px solid var(--wood-dark);
+    transform:rotate(-1.2deg);
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+    text-align:center;
+    position:relative;
+  }
+  .signpost::before,
+  .signpost::after{
     content:"";
-    position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(20,20,10,.1) 0%, rgba(20,20,10,.72) 100%);
+    position:absolute;
+    top:8px;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:#C9B27A;
+    box-shadow:inset 0 1px 1px rgba(0,0,0,.4);
   }
-  .ranch-hero .wrap{position:relative; z-index:1; padding-bottom:36px;}
-  .ranch-hero h1{
+  .signpost::before{left:8px;}
+  .signpost::after{right:8px;}
+  .signpost h1{
     font-family:var(--font-display);
     font-weight:900;
-    color:#FBF8EF;
-    font-size:clamp(32px, 5vw, 50px);
-    margin:0 0 6px;
-    text-shadow:0 2px 10px rgba(0,0,0,.35);
+    font-size:clamp(24px, 4vw, 34px);
+    margin:0;
+    letter-spacing:.04em;
   }
-  .ranch-hero .tagline{color:#E6DBBB; font-size:15px; margin:0;}
+  .signpost .en{
+    display:block;
+    font-size:11px;
+    letter-spacing:.18em;
+    color:#D8C4A0;
+    margin-top:4px;
+  }
+  .hero-tagline{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin:20px 0 0;
+  }
 
-  /* ---------- Info ---------- */
-  .info-panel{background:var(--panel); border-bottom:1px solid var(--line);}
-  .info-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
+  /* ---------- 資訊：柵欄指標牌 ---------- */
+  .signboard-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
     gap:22px;
-    padding:28px 0;
+    padding:44px 24px 10px;
+    max-width:980px;
+    margin:0 auto;
   }
-  @media (max-width:680px){ .info-grid{grid-template-columns:1fr;} }
-  .info-item .label{
-    font-size:12px;
+  .signboard{
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-top:6px solid var(--pasture);
+    padding:16px 18px;
+    width:250px;
+    box-shadow:0 4px 0 rgba(0,0,0,.05);
+  }
+  .signboard:nth-child(2){transform:rotate(.6deg);}
+  .signboard:nth-child(3){transform:rotate(-.6deg);}
+  .signboard .label{
+    font-size:11.5px;
     font-weight:700;
-    color:var(--gold);
-    letter-spacing:.05em;
-    margin-bottom:4px;
+    color:var(--pasture-dark);
+    letter-spacing:.06em;
+    margin-bottom:6px;
   }
-  .info-item .value{font-size:15px; color:var(--ink);}
+  .signboard .value{font-size:14px; color:var(--ink);}
 
-  /* ---------- Activities ---------- */
+  /* ---------- 活動：票根式卡片 ---------- */
   section.block{padding:46px 0;}
   section.block h2{
     font-family:var(--font-display);
     font-size:24px;
-    margin:0 0 20px;
+    margin:0 0 22px;
+    text-align:center;
   }
-  .activity-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:20px;
+  .ticket-row{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    max-width:640px;
+    margin:0 auto;
   }
-  @media (max-width:760px){ .activity-grid{grid-template-columns:1fr;} }
-  .activity-card{
-    background:var(--panel);
-    border:1px solid var(--line);
-    padding:20px;
+  .ticket{
+    display:flex;
+    align-items:stretch;
+    background:var(--paper);
+    border:1.5px dashed var(--gold);
   }
-  .activity-card .tag{
-    display:inline-block;
-    font-size:11.5px;
+  .ticket:nth-child(odd){transform:rotate(-.4deg);}
+  .ticket:nth-child(even){transform:rotate(.4deg);}
+  .ticket-stub{
+    flex:0 0 84px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-family:var(--font-display);
     font-weight:700;
+    font-size:12.5px;
     color:#fff;
     background:var(--pasture);
-    padding:3px 10px;
-    margin-bottom:10px;
+    padding:8px;
+    border-right:1.5px dashed var(--gold);
+    letter-spacing:.05em;
   }
-  .activity-card h3{
+  .ticket-stub.need{background:var(--wood);}
+  .ticket-body{padding:16px 20px;}
+  .ticket-body h3{
     font-family:var(--font-display);
-    margin:0 0 8px;
-    font-size:17px;
+    margin:0 0 6px;
+    font-size:16.5px;
   }
-  .activity-card p{margin:0; color:var(--ink-soft); font-size:14px;}
+  .ticket-body p{margin:0; color:var(--ink-soft); font-size:13.5px; max-width:52ch;}
 
-  /* ---------- Booking ---------- */
-  .booking{background:var(--barn-dark); color:#F1EAD6;}
-  .booking h2{color:#F1EAD6;}
-  .booking .note{color:#D8C3A6; font-size:14px; margin:0 0 20px; max-width:60ch;}
-  .booking-form{max-width:520px;}
+  /* ---------- 預約：明信片風格 ---------- */
+  .booking-section{background:#E7E4D2; padding:52px 0;}
+  .postcard{
+    max-width:520px;
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:30px 28px;
+    position:relative;
+  }
+  .postcard::after{
+    content:"預約";
+    position:absolute;
+    top:14px; right:16px;
+    width:46px; height:58px;
+    border:2px dashed var(--gold);
+    color:var(--gold);
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:rotate(4deg);
+  }
+  .postcard h2{
+    font-family:var(--font-display);
+    font-size:21px;
+    margin:0 0 8px;
+    text-align:left;
+  }
+  .postcard .note{color:var(--ink-soft); font-size:13.5px; margin:0 0 20px; max-width:70%;}
   .booking-form label{
     display:block;
-    font-size:13px;
+    font-size:12.5px;
     font-weight:700;
-    color:var(--gold);
+    color:var(--pasture-dark);
     letter-spacing:.04em;
-    margin-bottom:8px;
+    margin-bottom:7px;
   }
   .booking-form input[type="text"],
   .booking-form input[type="date"]{
     width:100%;
     font-family:var(--font-body);
     font-size:14.5px;
-    padding:13px 14px;
-    background:#F1EAD6;
-    border:none;
+    padding:12px 13px;
+    background:#fff;
+    border:1px solid var(--line);
     color:var(--ink);
     outline:none;
     margin-bottom:14px;
   }
+  .booking-form input:focus{border-color:var(--pasture);}
   .booking-form button{
     font-family:var(--font-body);
     font-weight:700;
     font-size:14.5px;
-    padding:13px 26px;
-    background:var(--gold);
-    color:#2B2015;
+    padding:12px 26px;
+    background:var(--pasture);
+    color:#fff;
     border:none;
     cursor:pointer;
   }
-  .booking-form button:hover{background:#D8AE5E;}
+  .booking-form button:hover{background:var(--pasture-dark);}
   .booking-confirm{
     display:none;
-    margin:18px 0 0;
+    margin:16px 0 0;
     font-weight:700;
-    color:var(--gold);
-    font-size:15px;
+    color:var(--pasture-dark);
+    font-size:14.5px;
   }
   .booking-confirm.show{display:block;}
 
-  footer{padding:28px 0 44px; font-size:12px; color:#8C7A5E;}
+  footer{padding:28px 0 44px; font-size:12px; color:#8C7A5E; text-align:center;}
 
   /* ---------- 恐怖彩蛋：預約送出後（漸變轉黑＋文字由左至右、由上而下填滿） ---------- */
   .dread-overlay{
@@ -222,41 +299,44 @@
     transition:opacity .6s ease;
   }
   .dread-hint.show{opacity:1;}
+
+  @media (max-width:600px){
+    .signboard{width:100%;}
+    .ticket{flex-direction:column;}
+    .ticket-stub{border-right:none; border-bottom:1.5px dashed var(--gold); padding:10px;}
+    .postcard .note{max-width:100%;}
+  }
 </style>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="wrap">
-      <div class="brand">長家<span>觀光牧場</span></div>
-    </div>
+  <div class="topline">
+    <div class="wrap"><a href="index.html">← 返回和善里導覽</a></div>
   </div>
 
-  <!-- ================= Hero ================= -->
-  <div class="ranch-hero" style="background-image:url('assets/ranch.jpg');">
-    <div class="wrap">
+  <!-- ================= Hero：滿版照片＋木牌招牌 ================= -->
+  <img class="ranch-photo" src="assets/ranch.jpg" alt="長家觀光牧場入口">
+  <div class="signpost-wrap">
+    <div class="signpost">
       <h1>長家觀光牧場</h1>
-      <p class="tagline">與動物和土地，共度慢時光</p>
+      <span class="en">LONG'S FAMILY RANCH</span>
     </div>
   </div>
+  <p class="hero-tagline">與動物和土地，共度慢時光</p>
 
   <!-- ================= 交通與購票資訊 ================= -->
-  <div class="info-panel">
-    <div class="wrap">
-      <div class="info-grid">
-        <div class="info-item">
-          <div class="label">地址</div>
-          <div class="value">和善里東楊路12號</div>
-        </div>
-        <div class="info-item">
-          <div class="label">交通方式</div>
-          <div class="value">自行開車或搭乘和善里免費接駁車，於牧場入口下車即達，園區備有免費停車場。</div>
-        </div>
-        <div class="info-item">
-          <div class="label">購票方式</div>
-          <div class="value">全票／優待票可於現場售票口購買；騎馬與擠奶體驗需另外預約，詳見下方預約表單。</div>
-        </div>
-      </div>
+  <div class="signboard-row">
+    <div class="signboard">
+      <div class="label">地址</div>
+      <div class="value">和善里東楊路12號</div>
+    </div>
+    <div class="signboard">
+      <div class="label">交通方式</div>
+      <div class="value">自行開車或搭乘和善里免費接駁車，於牧場入口下車即達，園區備有免費停車場。</div>
+    </div>
+    <div class="signboard">
+      <div class="label">購票方式</div>
+      <div class="value">全票／優待票可於現場售票口購買；騎馬與擠奶體驗需另外預約，詳見下方預約表單。</div>
     </div>
   </div>
 
@@ -264,45 +344,51 @@
   <section class="block">
     <div class="wrap">
       <h2>園區活動</h2>
-      <div class="activity-grid">
-        <div class="activity-card">
-          <span class="tag">自由參觀</span>
-          <h3>步道體驗</h3>
-          <p>沿著牧場外圍的自然步道漫步，欣賞青山綠地與放牧中的牛馬，全程約 40 分鐘，老少咸宜，無需預約。</p>
+      <div class="ticket-row">
+        <div class="ticket">
+          <div class="ticket-stub">自由參觀</div>
+          <div class="ticket-body">
+            <h3>步道體驗</h3>
+            <p>沿著牧場外圍的自然步道漫步，欣賞青山綠地與放牧中的牛馬，全程約 40 分鐘，老少咸宜，無需預約。</p>
+          </div>
         </div>
-        <div class="activity-card">
-          <span class="tag">需預約</span>
-          <h3>騎馬體驗</h3>
-          <p>由專業教練陪同，帶領遊客騎乘溫馴馬匹繞行牧場一圈，體驗草原上的悠閒時光。需事先預約，恕不接受現場報名。</p>
+        <div class="ticket">
+          <div class="ticket-stub need">需預約</div>
+          <div class="ticket-body">
+            <h3>騎馬體驗</h3>
+            <p>由專業教練陪同，帶領遊客騎乘溫馴馬匹繞行牧場一圈，體驗草原上的悠閒時光。需事先預約，恕不接受現場報名。</p>
+          </div>
         </div>
-        <div class="activity-card">
-          <span class="tag">需預約</span>
-          <h3>擠奶體驗</h3>
-          <p>近距離接觸乳牛，在工作人員指導下體驗親手擠奶的樂趣，適合親子同遊。需事先預約，恕不接受現場報名。</p>
+        <div class="ticket">
+          <div class="ticket-stub need">需預約</div>
+          <div class="ticket-body">
+            <h3>擠奶體驗</h3>
+            <p>近距離接觸乳牛，在工作人員指導下體驗親手擠奶的樂趣，適合親子同遊。需事先預約，恕不接受現場報名。</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= 預約表單 ================= -->
-  <section class="booking">
-    <div class="wrap block">
-      <h2>騎馬／擠奶體驗預約</h2>
-      <p class="note">請填寫姓名與希望預約的日期，我們會盡快與您確認。</p>
-      <form class="booking-form" id="bookingForm">
-        <label for="bookingName">姓名</label>
-        <input type="text" id="bookingName" placeholder="請輸入姓名" required>
-        <label for="bookingDate">預約日期</label>
-        <input type="date" id="bookingDate" required>
-        <button type="submit">送出預約</button>
-      </form>
-      <p class="booking-confirm" id="bookingConfirm"></p>
+  <!-- ================= 預約表單：明信片卡片 ================= -->
+  <section class="booking-section">
+    <div class="wrap">
+      <div class="postcard">
+        <h2>騎馬／擠奶體驗預約</h2>
+        <p class="note">請填寫姓名與希望預約的日期，我們會盡快與您確認。</p>
+        <form class="booking-form" id="bookingForm">
+          <label for="bookingName">姓名</label>
+          <input type="text" id="bookingName" placeholder="請輸入姓名" required>
+          <label for="bookingDate">預約日期</label>
+          <input type="date" id="bookingDate" required>
+          <button type="submit">送出預約</button>
+        </form>
+        <p class="booking-confirm" id="bookingConfirm"></p>
+      </div>
     </div>
   </section>
 
-  <footer>
-    <div class="wrap">© 2026 長家觀光牧場。本頁面內容均為虛擬創作。</div>
-  </footer>
+  <footer>© 2026 長家觀光牧場。本頁面內容均為虛擬創作。</footer>
 
   <!-- ================= 恐怖彩蛋：送出預約後 ================= -->
   <div class="dread-overlay" id="dreadOverlay">
@@ -313,7 +399,6 @@
 <script>
   var bookingForm = document.getElementById("bookingForm");
   var nameInput = document.getElementById("bookingName");
-  var dateInput = document.getElementById("bookingDate");
   var bookingConfirm = document.getElementById("bookingConfirm");
   var dreadOverlay = document.getElementById("dreadOverlay");
   var dreadGrid = document.getElementById("dreadGrid");
@@ -351,7 +436,6 @@
     dreadHint.classList.remove("show");
     dreadOverlay.classList.add("show");
 
-    // 畫面先漸變轉黑，再讓文字依序由左至右、由上而下填滿畫面
     setTimeout(function(){
       dreadGrid.classList.add("reveal");
     }, 600);

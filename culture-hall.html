@@ -11,14 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F5EFE0;
-    --panel:#FBF7EA;
-    --ink:#241B15;
-    --ink-soft:#5A4B3A;
+    --bg:#F5F0E4;
+    --paper:#FBF8EF;
+    --ink:#231D16;
+    --ink-soft:#5A5140;
     --brick:#9C3B2E;
     --brick-dark:#601E17;
     --gold:#B8893F;
-    --line:#DFCFA9;
+    --line:#DFD3AF;
     --font-display:'Noto Serif TC', serif;
     --font-body:'Noto Sans TC', sans-serif;
   }
@@ -33,80 +33,113 @@
   }
   a{color:inherit;}
   img{max-width:100%;display:block;}
+  [hidden]{display:none !important;}
   :focus-visible{outline:2.5px solid var(--brick); outline-offset:3px;}
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
 
-  .wrap{max-width:900px; margin:0 auto; padding:0 24px;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
 
-  /* ---------- 頂部：館名 + 四個分頁選單 ---------- */
-  .topbar{background:var(--brick-dark); color:#F3E7D2;}
-  .topbar .wrap{padding:16px 24px;}
-  .brand{
+  .topline{padding:14px 24px;}
+  .topline a{font-size:13px; font-weight:700; color:var(--brick); text-decoration:none;}
+  .topline a:hover{color:var(--brick-dark);}
+
+  /* ---------- 相框式 Hero ---------- */
+  .frame-hero{text-align:center; padding:6px 24px 0;}
+  .frame{
+    max-width:560px;
+    margin:0 auto;
+    padding:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 10px 26px rgba(40,25,10,.14);
+  }
+  .frame-caption{font-size:12px; color:var(--ink-soft); font-style:italic; margin:10px 0 0;}
+  .hall-title{
     font-family:var(--font-display);
-    font-weight:700;
-    font-size:19px;
-    margin-bottom:12px;
+    font-weight:900;
+    font-size:clamp(26px, 4.2vw, 38px);
+    text-align:center;
+    margin:22px 0 4px;
   }
-  .tab-nav{
+  .hall-subtitle{text-align:center; color:var(--ink-soft); font-size:14px; margin:0 0 30px;}
+
+  /* ---------- 側邊選單＋內容雙欄 ---------- */
+  .hall-shell{
+    display:grid;
+    grid-template-columns:190px 1fr;
+    gap:44px;
+    padding:0 24px 60px;
+    max-width:920px;
+    margin:0 auto;
+  }
+  .hall-nav{
     display:flex;
-    flex-wrap:wrap;
+    flex-direction:column;
     gap:2px;
-    border-top:1px solid rgba(255,255,255,.15);
+    border-left:2px solid var(--line);
   }
-  .tab-nav button{
+  .hall-nav button{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    text-align:left;
     font-family:var(--font-body);
     font-size:14px;
     font-weight:500;
-    color:#D8C4A6;
+    color:var(--ink-soft);
     background:none;
     border:none;
-    padding:12px 16px;
+    border-left:2px solid transparent;
+    margin-left:-2px;
+    padding:11px 14px;
     cursor:pointer;
-    border-bottom:3px solid transparent;
   }
-  .tab-nav button:hover{color:#F3E7D2;}
-  .tab-nav button[aria-selected="true"]{
-    color:#F3E7D2;
+  .hall-nav button .num{
+    font-family:var(--font-display);
     font-weight:700;
-    border-bottom-color:var(--gold);
+    color:var(--gold);
+    font-size:13px;
+  }
+  .hall-nav button:hover{color:var(--ink);}
+  .hall-nav button[aria-selected="true"]{
+    color:var(--brick);
+    font-weight:700;
+    border-left-color:var(--brick);
+    background:var(--paper);
   }
 
-  /* ---------- Hero ---------- */
-  .hall-hero{
-    position:relative;
-    min-height:300px;
-    display:flex;
-    align-items:flex-end;
-    background-size:cover;
-    background-position:center;
+  @media (max-width:720px){
+    .hall-shell{grid-template-columns:1fr; gap:20px;}
+    .hall-nav{
+      flex-direction:row;
+      overflow-x:auto;
+      border-left:none;
+      border-bottom:1px solid var(--line);
+      gap:0;
+    }
+    .hall-nav button{
+      border-left:none;
+      border-bottom:3px solid transparent;
+      margin-left:0;
+      white-space:nowrap;
+    }
+    .hall-nav button[aria-selected="true"]{
+      border-left:none;
+      border-bottom-color:var(--brick);
+      background:none;
+    }
   }
-  .hall-hero::after{
-    content:"";
-    position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(20,10,8,.1) 0%, rgba(20,10,8,.72) 100%);
-  }
-  .hall-hero .wrap{position:relative; z-index:1; padding-bottom:30px;}
-  .hall-hero h1{
-    font-family:var(--font-display);
-    font-weight:900;
-    color:#FBF7EA;
-    font-size:clamp(28px, 4.5vw, 42px);
-    margin:0 0 6px;
-    text-shadow:0 2px 10px rgba(0,0,0,.35);
-  }
-  .hall-hero .tagline{color:#E7D6B8; font-size:14.5px; margin:0;}
 
-  /* ---------- 分頁內容 ---------- */
-  .tab-panel{display:none; padding:46px 0 60px;}
+  /* ---------- 內容面板 ---------- */
+  .tab-panel{display:none;}
   .tab-panel.active{display:block;}
-  .tab-panel h2{
-    font-family:var(--font-display);
-    font-size:24px;
-    margin:0 0 18px;
-  }
-  .tab-panel p{max-width:66ch; color:var(--ink-soft);}
+  .panel-heading{display:flex; align-items:baseline; gap:10px; margin-bottom:6px;}
+  .panel-heading .num{font-family:var(--font-display); font-weight:900; color:var(--gold); font-size:19px;}
+  .panel-heading h2{font-family:var(--font-display); font-size:22px; margin:0;}
+  .panel-rule{width:52px; height:2px; background:var(--gold); margin:0 0 20px;}
+  .tab-panel p{max-width:60ch; color:var(--ink-soft);}
 
-  footer{padding:24px 0 44px; font-size:12px; color:#9C8B70;}
+  footer{padding:24px 0 44px; font-size:12px; color:#9C8B70; text-align:center;}
 
   /* ---------- 人文紀事：進入前的提示視窗 ---------- */
   .intro-modal{
@@ -120,113 +153,272 @@
   }
   .intro-modal.show{display:flex;}
   .intro-card{
-    max-width:460px;
+    max-width:440px;
     width:100%;
-    background:var(--panel);
+    background:var(--paper);
     border:1px solid var(--line);
-    padding:30px 26px;
+    padding:28px 26px;
     text-align:center;
   }
-  .intro-card h3{
-    font-family:var(--font-display);
-    font-size:19px;
-    margin:0 0 14px;
-  }
-  .intro-card p{
-    color:var(--ink-soft);
-    font-size:14.5px;
-    max-width:none;
-    margin:0 0 22px;
-  }
+  .intro-card h3{font-family:var(--font-display); font-size:18px; margin:0 0 14px;}
+  .intro-card p{color:var(--ink-soft); font-size:14px; max-width:none; margin:0 0 20px;}
   .intro-card button{
     font-family:var(--font-body);
     font-weight:700;
-    font-size:14.5px;
-    padding:11px 30px;
+    font-size:14px;
+    padding:10px 28px;
     background:var(--brick);
     color:#FBF7EA;
     border:none;
     cursor:pointer;
   }
   .intro-card button:hover{background:var(--brick-dark);}
+
+  /* ================= 人文紀事：仿社群貼文元件（深色小工具） ================= */
+  .feed-app{
+    max-width:400px;
+    background:#0E0E10;
+    color:#EDEDED;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 10px 26px rgba(0,0,0,.22);
+  }
+  .post-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .post-avatar{width:36px; height:36px; border-radius:50%; object-fit:cover;}
+  .post-who{display:flex; flex-direction:column;}
+  .post-username{
+    background:none; border:none; color:#fff; font-weight:700; font-size:14px;
+    cursor:pointer; padding:0; text-align:left; font-family:var(--font-body);
+  }
+  .post-username:hover{text-decoration:underline;}
+  .post-username.static{cursor:default;}
+  .post-username.static:hover{text-decoration:none;}
+  .post-time{font-size:12px; color:#8B8B8B;}
+  .post-text{font-size:14.5px; margin:0 0 12px; color:#F2F2F2; max-width:none;}
+  .post-photo{width:100%; border-radius:10px; margin-bottom:10px;}
+  .post-ai-tag{
+    display:inline-block;
+    font-size:11px;
+    color:#8B8B8B;
+    border:1px solid #333;
+    padding:2px 9px;
+    border-radius:20px;
+    margin-bottom:12px;
+  }
+  .post-actions{display:flex; gap:18px; color:#C7C7C7; font-size:14px; margin-bottom:14px;}
+
+  .comment-box{border-top:1px solid #232323; padding-top:12px;}
+  .comment-list{display:flex; flex-direction:column; gap:8px; margin-bottom:10px;}
+  .comment-list .comment-item{font-size:13.5px; color:#DADADA;}
+  .comment-list .comment-item b{color:#fff; margin-right:6px; font-weight:700;}
+  .comment-form{display:flex; gap:8px;}
+  .comment-form input{
+    flex:1;
+    background:#1B1B1D;
+    border:1px solid #2C2C2E;
+    color:#fff;
+    padding:9px 13px;
+    border-radius:20px;
+    font-size:13.5px;
+    outline:none;
+  }
+  .comment-form input:focus{border-color:#555;}
+  .comment-form button{
+    background:#2C6BFF;
+    color:#fff;
+    border:none;
+    padding:0 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .comment-form button:hover{background:#1F55D6;}
+
+  .back-btn{background:none; border:none; color:#8B8B8B; font-size:13px; cursor:pointer; margin-bottom:14px; padding:0;}
+  .back-btn:hover{color:#fff;}
+  .profile-head{display:flex; align-items:center; gap:14px; margin-bottom:14px;}
+  .profile-avatar{width:56px; height:56px; border-radius:50%; object-fit:cover;}
+  .profile-head h3{margin:0; font-size:16px; font-family:var(--font-display); color:#fff;}
+  .profile-handle{font-size:12.5px; color:#8B8B8B;}
+  .profile-bio{font-size:13.5px; color:#D5D5D5; margin:0 0 14px; max-width:none;}
+  .profile-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .profile-tags .tag{
+    display:inline-flex; align-items:center; gap:5px;
+    background:#1B1B1D; border:1px solid #2C2C2E; color:#D5D5D5;
+    font-size:12px; padding:5px 12px; border-radius:20px;
+  }
+  .dot{width:7px; height:7px; border-radius:50%; display:inline-block;}
+  .dot.orange{background:#E07B39;}
+  .dot.red{background:#C0453A;}
+  .profile-stats{font-size:12.5px; color:#8B8B8B; margin-bottom:14px;}
+  .profile-buttons{display:flex; gap:10px; margin-bottom:18px;}
+  .btn-outline{
+    flex:1; background:none; border:1px solid #3A3A3C; color:#EDEDED;
+    padding:9px; border-radius:8px; font-size:13px; font-weight:700; cursor:default;
+  }
+  .profile-subnav{display:flex; gap:18px; border-bottom:1px solid #232323; margin-bottom:16px; font-size:13px; color:#8B8B8B;}
+  .profile-subnav span{padding-bottom:10px;}
+  .profile-subnav span.active{color:#fff; font-weight:700; border-bottom:2px solid #fff;}
 </style>
 </head>
 <body>
 
-  <!-- ================= 頂部：館名＋分頁選單 ================= -->
-  <div class="topbar">
-    <div class="wrap">
-      <div class="brand">和善里文化展館</div>
-      <nav class="tab-nav" id="tabNav">
-        <button type="button" data-tab="tea" aria-selected="true">百年茶藝</button>
-        <button type="button" data-tab="heritage" aria-selected="false">走訪和善里</button>
-        <button type="button" data-tab="stories" aria-selected="false">人文紀事</button>
-        <button type="button" data-tab="about" aria-selected="false">關於我們</button>
-      </nav>
-    </div>
+  <div class="topline">
+    <div class="wrap"><a href="index.html">← 返回和善里導覽</a></div>
   </div>
 
-  <!-- ================= Hero ================= -->
-  <div class="hall-hero" style="background-image:url('assets/culture-hall.jpg');">
-    <div class="wrap">
-      <h1>和善里文化展館</h1>
-      <p class="tagline">歷史與傳承</p>
+  <!-- ================= 相框式 Hero ================= -->
+  <div class="frame-hero">
+    <div class="frame">
+      <img src="assets/culture-hall.jpg" alt="和善里文化展館外觀">
     </div>
+    <p class="frame-caption">和善里文化展館外觀</p>
+  </div>
+  <h1 class="hall-title">和善里文化展館</h1>
+  <p class="hall-subtitle">歷史與傳承</p>
+
+  <!-- ================= 側邊選單＋內容 ================= -->
+  <div class="hall-shell">
+    <nav class="hall-nav" id="tabNav">
+      <button type="button" data-tab="tea" aria-selected="true"><span class="num">壹</span>百年茶藝</button>
+      <button type="button" data-tab="heritage" aria-selected="false"><span class="num">貳</span>走訪和善里</button>
+      <button type="button" data-tab="stories" aria-selected="false"><span class="num">參</span>人文紀事</button>
+      <button type="button" data-tab="about" aria-selected="false"><span class="num">肆</span>關於我們</button>
+    </nav>
+
+    <main>
+      <!-- ============ 百年茶藝（預設首頁） ============ -->
+      <section class="tab-panel active" id="panel-tea">
+        <div class="panel-heading"><span class="num">壹</span><h2>百年茶藝</h2></div>
+        <div class="panel-rule"></div>
+        <p>
+          和善里種茶的歷史可以追溯至日治時期，當時因氣候與土壤條件適合茶樹生長，
+          逐漸發展成北部重要的茶葉產地之一。歷經數代茶農的耕耘與傳承，
+          和善里發展出獨特的製茶工序與品茗文化。
+        </p>
+        <p>
+          龍井茶、東方美人茶等品項至今仍是里民餐桌上與待客時不可或缺的角色，
+          每年茶季，許多老茶農仍堅持以手工揉捻茶葉，將這份百年技藝延續下去。
+        </p>
+      </section>
+
+      <!-- ============ 走訪和善里 ============ -->
+      <section class="tab-panel" id="panel-heritage">
+        <div class="panel-heading"><span class="num">貳</span><h2>走訪和善里</h2></div>
+        <div class="panel-rule"></div>
+        <p>
+          和善里保留了為數不少的老屋與街屋建築，紅磚瓦頂與木造門窗訴說著小鎮的歲月痕跡。
+          從清代開墾聚落、日治時期的街屋立面，到戰後改建的傳統三合院，
+          每一棟建築都是里民生活記憶的載體。
+        </p>
+        <p>這裡記錄著和善里現存的歷史建築與街區，是認識小鎮發展脈絡的重要線索。</p>
+      </section>
+
+      <!-- ============ 人文紀事 ============ -->
+      <section class="tab-panel" id="panel-stories">
+        <div class="panel-heading"><span class="num">參</span><h2>人文紀事</h2></div>
+        <div class="panel-rule"></div>
+
+        <div class="feed-app" id="feedApp">
+          <!-- 動態頁面：貼文列表 -->
+          <div id="feedView">
+            <article>
+              <header class="post-head">
+                <img class="post-avatar" src="assets/wenlong-avatar.jpg" alt="wenlong_0707 頭像">
+                <div class="post-who">
+                  <button type="button" class="post-username" id="openProfileBtn">wenlong_0707</button>
+                  <span class="post-time">12小時</span>
+                </div>
+              </header>
+              <p class="post-text">阿龍伯，去牧場玩。</p>
+              <img class="post-photo" src="assets/wenlong-ranch-post.jpg" alt="阿龍伯在長家觀光牧場">
+              <span class="post-ai-tag">AI 內容</span>
+              <div class="post-actions">
+                <span>♥ 24</span>
+                <span>💬 24</span>
+                <span>⟲</span>
+                <span>➤</span>
+              </div>
+
+              <div class="comment-box">
+                <div class="comment-list" id="commentList"></div>
+                <form class="comment-form" id="commentForm">
+                  <input type="text" id="commentInput" placeholder="留言…" maxlength="120" aria-label="留言">
+                  <button type="submit">送出</button>
+                </form>
+              </div>
+            </article>
+          </div>
+
+          <!-- 動態頁面：wenlong_0707 個人頁 -->
+          <div id="profileView" hidden>
+            <button type="button" class="back-btn" id="backToFeedBtn">← 返回動態</button>
+            <div class="profile-head">
+              <img class="profile-avatar" src="assets/wenlong-avatar.jpg" alt="陳文龍頭像">
+              <div>
+                <h3>陳文龍（阿龍伯）</h3>
+                <span class="profile-handle">wenlong_0707</span>
+              </div>
+            </div>
+            <p class="profile-bio">
+              我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。
+              曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。
+              人生賺，像我最愛的姿勢一樣：比個「耶」就過去了！
+            </p>
+            <div class="profile-tags">
+              <span class="tag">廚藝</span>
+              <span class="tag"><i class="dot orange"></i>籃球</span>
+              <span class="tag"><i class="dot red"></i>棒球</span>
+              <span class="tag">種花</span>
+              <span class="tag">茶藝</span>
+            </div>
+            <div class="profile-stats">487 位粉絲・55 萬次最近瀏覽次數</div>
+            <div class="profile-buttons">
+              <button type="button" class="btn-outline" disabled>追蹤中</button>
+              <button type="button" class="btn-outline" disabled>發送訊息</button>
+            </div>
+            <div class="profile-subnav">
+              <span class="active">串文</span>
+              <span>回覆</span>
+              <span>影音內容</span>
+              <span>轉發</span>
+            </div>
+            <article>
+              <header class="post-head">
+                <img class="post-avatar" src="assets/wenlong-avatar.jpg" alt="wenlong_0707 頭像">
+                <div class="post-who">
+                  <span class="post-username static">wenlong_0707</span>
+                  <span class="post-time">12小時</span>
+                </div>
+              </header>
+              <p class="post-text">阿龍伯，去牧場玩。</p>
+              <img class="post-photo" src="assets/wenlong-ranch-post.jpg" alt="阿龍伯在長家觀光牧場">
+              <span class="post-ai-tag">AI 內容</span>
+              <div class="post-actions">
+                <span>♥ 24</span>
+                <span>💬 24</span>
+                <span>⟲</span>
+                <span>➤</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 關於我們 ============ -->
+      <section class="tab-panel" id="panel-about">
+        <div class="panel-heading"><span class="num">肆</span><h2>關於我們</h2></div>
+        <div class="panel-rule"></div>
+        <p>
+          和善里文化展館由里辦公處與在地文史工作者共同籌辦，
+          致力於保存與推廣和善里的歷史文化與生活記憶，展館內容持續更新中。
+        </p>
+      </section>
+    </main>
   </div>
 
-  <!-- ================= 分頁：百年茶藝（預設首頁） ================= -->
-  <section class="tab-panel active" id="panel-tea">
-    <div class="wrap">
-      <h2>百年茶藝</h2>
-      <p>
-        和善里種茶的歷史可以追溯至日治時期，當時因氣候與土壤條件適合茶樹生長，
-        逐漸發展成北部重要的茶葉產地之一。歷經數代茶農的耕耘與傳承，
-        和善里發展出獨特的製茶工序與品茗文化。
-      </p>
-      <p>
-        龍井茶、東方美人茶等品項至今仍是里民餐桌上與待客時不可或缺的角色，
-        每年茶季，許多老茶農仍堅持以手工揉捻茶葉，將這份百年技藝延續下去。
-      </p>
-    </div>
-  </section>
-
-  <!-- ================= 分頁：走訪和善里 ================= -->
-  <section class="tab-panel" id="panel-heritage">
-    <div class="wrap">
-      <h2>走訪和善里</h2>
-      <p>
-        和善里保留了為數不少的老屋與街屋建築，紅磚瓦頂與木造門窗訴說著小鎮的歲月痕跡。
-        從清代開墾聚落、日治時期的街屋立面，到戰後改建的傳統三合院，
-        每一棟建築都是里民生活記憶的載體。
-      </p>
-      <p>
-        這裡記錄著和善里現存的歷史建築與街區，是認識小鎮發展脈絡的重要線索。
-      </p>
-    </div>
-  </section>
-
-  <!-- ================= 分頁：人文紀事（先留空，之後放里民貼文） ================= -->
-  <section class="tab-panel" id="panel-stories">
-    <div class="wrap">
-      <h2>人文紀事</h2>
-      <!-- 之後於此處新增假造的里民 Thread 貼文，作為解謎線索 -->
-    </div>
-  </section>
-
-  <!-- ================= 分頁：關於我們 ================= -->
-  <section class="tab-panel" id="panel-about">
-    <div class="wrap">
-      <h2>關於我們</h2>
-      <p>
-        和善里文化展館由里辦公處與在地文史工作者共同籌辦，
-        致力於保存與推廣和善里的歷史文化與生活記憶，展館內容持續更新中。
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    <div class="wrap">© 2026 和善里文化展館。本頁面內容均為虛擬創作。</div>
-  </footer>
+  <footer>© 2026 和善里文化展館。本頁面內容均為虛擬創作。</footer>
 
   <!-- ================= 人文紀事：進入前的提示視窗 ================= -->
   <div class="intro-modal" id="storiesModal">
@@ -242,10 +434,15 @@
   </div>
 
 <script>
-  var tabButtons = document.querySelectorAll(".tab-nav button");
+  var tabButtons = document.querySelectorAll(".hall-nav button");
   var panels = document.querySelectorAll(".tab-panel");
   var storiesModal = document.getElementById("storiesModal");
   var storiesConfirm = document.getElementById("storiesConfirm");
+
+  var feedView = document.getElementById("feedView");
+  var profileView = document.getElementById("profileView");
+  var openProfileBtn = document.getElementById("openProfileBtn");
+  var backToFeedBtn = document.getElementById("backToFeedBtn");
 
   function activateTab(tabId){
     tabButtons.forEach(function(btn){
@@ -261,6 +458,8 @@
     btn.addEventListener("click", function(){
       var tabId = btn.getAttribute("data-tab");
       if (tabId === "stories"){
+        profileView.hidden = true;
+        feedView.hidden = false;
         storiesModal.classList.add("show");
       }
       activateTab(tabId);
@@ -269,6 +468,37 @@
 
   storiesConfirm.addEventListener("click", function(){
     storiesModal.classList.remove("show");
+  });
+
+  /* ---------- 人文紀事：貼文 ↔ 個人頁切換 ---------- */
+  openProfileBtn.addEventListener("click", function(){
+    feedView.hidden = true;
+    profileView.hidden = false;
+  });
+  backToFeedBtn.addEventListener("click", function(){
+    profileView.hidden = true;
+    feedView.hidden = false;
+  });
+
+  /* ---------- 留言（僅存在於當前畫面，重新整理即消失） ---------- */
+  var commentForm = document.getElementById("commentForm");
+  var commentInput = document.getElementById("commentInput");
+  var commentList = document.getElementById("commentList");
+
+  commentForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var text = commentInput.value.trim();
+    if (text === "") return;
+
+    var item = document.createElement("div");
+    item.className = "comment-item";
+    var who = document.createElement("b");
+    who.textContent = "你";
+    item.appendChild(who);
+    item.appendChild(document.createTextNode(text));
+    commentList.appendChild(item);
+
+    commentInput.value = "";
   });
 </script>
 

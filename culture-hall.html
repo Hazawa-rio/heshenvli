@@ -242,7 +242,7 @@
 
   .comment-box{border-top:1px solid #232323; padding-top:12px;}
   .comment-list{display:flex; flex-direction:column; gap:8px; margin-bottom:10px;}
-  .comment-list .comment-item{font-size:13.5px; color:#fff;}
+  .comment-list .comment-item{font-size:13.5px; color:#fff; white-space:pre-line;}
   .comment-list .comment-item .comment-author{
     background:none; border:none; padding:0; cursor:pointer;
     color:#fff; font-weight:700; margin-right:6px; font-size:inherit; font-family:inherit;
@@ -466,7 +466,7 @@
     "wenlong_0707": {
       name: "陳文龍（阿龍伯）",
       avatarImg: "assets/wenlong-avatar.jpg",
-      bio: "我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。人生賺，像我最愛的姿勢一樣：比個「耶」就過去了！",
+      bio: "我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。人生嘛，像我最愛的姿勢一樣：比個「耶」就過去了！",
       tags: [{label:"廚藝"}, {label:"籃球", dot:"orange"}, {label:"棒球", dot:"red"}, {label:"種花"}, {label:"茶藝"}],
       stats: "487 位粉絲・55 萬次最近瀏覽次數"
     },
@@ -484,10 +484,23 @@
       tags: [],
       stats: "141 位粉絲・50 萬次最近瀏覽次數"
     },
-    "jiaxinchen0802": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "jiaxinchen0802": {
+      name: "陳佳興",
+      avatarImg: "assets/jiaxin-avatar.jpg",
+      bio: "陳佳興，阿龍伯的大兒子。",
+      tags: [],
+      stats: ""
+    },
     "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
     "chen_wanglin": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
-    "daojin.chen": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""}
+    "daojin.chen": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "muhammadchopravasani": {
+      name: "小穆",
+      avatarImg: "assets/muhammad-avatar.jpg",
+      bio: "老巷新聲成員，來自印度的小穆。",
+      tags: [],
+      stats: ""
+    }
   };
 
   // 公開動態牆（依時間新到舊）
@@ -517,7 +530,8 @@
   var profilePosts = {
     "wenlong_0707": ["p1", "p2"],
     "williamchen0119": ["p3"],
-    "linde_670607": ["p7", "p6", "p5", "p4"]
+    "linde_670607": ["p7", "p6", "p5", "p4"],
+    "jiaxinchen0802": ["p9", "p8"]
   };
   var postsById = {
     "p1": feedPosts[0],
@@ -566,6 +580,26 @@
       likes:null, commentCount:null,
       comments:[],
       allowNewComments:true
+    },
+    "p8": {
+      id:"p8", author:"jiaxinchen0802", time:"2026-8-22",
+      text:"大家好 我是佳興\n緣分始於相見時的微笑 祝福您 我的朋友\n當你笑 全世界都跟著你笑 樂觀心情決定著環境願你笑容永遠燦爛",
+      image:"assets/jiaxin-santorini.jpg",
+      likes:21, commentCount:9,
+      comments:[],
+      allowNewComments:true
+    },
+    "p9": {
+      id:"p9", author:"jiaxinchen0802", time:"2026-8-23",
+      text:"果然人到了中年 就戒不掉茶和咖啡\n人生就是如此 像咖啡一樣 澀中帶一點甜\n但我相信只要認真的面對生活 就一定可以克服難關的",
+      image:"assets/jiaxin-coffee.jpg",
+      likes:null, commentCount:null,
+      comments:[
+        {author:"daojin.chen", text:"大哥最近要不要來日本找我😅", likes:2},
+        {author:"jiaxinchen0802", text:"好啊！小京弟😅\n有空的話就過去～", likes:1},
+        {author:"daojin.chen", text:"大哥今天我回到台灣了來吃飯", likes:0}
+      ],
+      allowNewComments:true
     }
   };
 
@@ -578,6 +612,15 @@
       likes:null, commentCount:null,
       comments:[],
       allowNewComments:true
+    },
+    {
+      id:"h2", author:"muhammadchopravasani", time:"2026-8-29",
+      text:"हे भगवान, एक सांप कैसे हो सकता है! यह वास्तव में भयानक है। मुझे उम्मीद है कि वह मुझे नहीं काटेगा। यह वास्तव में भयानक है! मैंने अपने जीवन में कभी ऐसी स्थिति का सामना नहीं किया है! यह मुझे वास्तव में असहज बनाता है।",
+      image:"assets/muhammad-snake.jpg",
+      likes:25, commentCount:16,
+      comments:[],
+      allowNewComments:true,
+      keywords:["মজুমদার"]
     }
   ];
 
@@ -833,7 +876,9 @@
     if (query === "") return;
 
     var matches = hiddenPosts.filter(function(post){
-      return post.text.indexOf(query) !== -1;
+      if (post.text.indexOf(query) !== -1) return true;
+      if (post.keywords && post.keywords.indexOf(query) !== -1) return true;
+      return false;
     });
 
     renderSearchResults(query, matches);

@@ -500,6 +500,13 @@
       bio: "老巷新聲成員，來自印度的小穆。",
       tags: [],
       stats: ""
+    },
+    "renjian_0827": {
+      name: "阿建爺",
+      avatarLetter: "建",
+      bio: "阿德叔的老戰友，人稱阿建爺。",
+      tags: [],
+      stats: ""
     }
   };
 
@@ -517,25 +524,92 @@
       allowNewComments:true
     },
     {
+      id:"p10", author:"wenlong_0707", time:"9/1",
+      text:"阿龍伯，早起，面對新的一天",
+      image:"assets/wenlong-stretch.jpg",
+      likes:32, commentCount:38,
+      comments:[],
+      allowNewComments:true,
+      autoReplies:[
+        {
+          keywords:["後面","后面","紙條","纸条","便利貼","便利贴","9月2日","9月2號","9月2号","9/2"],
+          author:"wenlong_0707",
+          text:"阿龍伯，記性不好，要用紙條記甚麼時候要給蘭花下肥料。"
+        }
+      ]
+    },
+    {
       id:"p2", author:"wenlong_0707", time:"2天",
       text:"阿龍伯，幫我的五個孩子，拍一張合照。\n女兒，可能還要再，之後才會創threads。\n@jiaxinchen0802 @chengingtsai16888 @chen_wanglin @daojin.chen @williamchen0119",
       image:"assets/wenlong-sons-photo.jpg",
       likes:31, commentCount:6,
       comments:[],
       allowNewComments:true
+    },
+    {
+      id:"p11", author:"wenlong_0707", time:"8/31",
+      text:"阿龍伯，騎腳踏車。",
+      image:"assets/wenlong-bike.jpg",
+      likes:50, commentCount:41,
+      comments:[],
+      allowNewComments:true,
+      autoReplies:[
+        {
+          keywords:["文件","文件夾","文件夹","資料夾","资料夹"],
+          author:"wenlong_0707",
+          text:"這是給明安的工作資料。"
+        }
+      ]
+    },
+    {
+      id:"p12", author:"wenlong_0707", time:"8/28",
+      text:"阿龍伯和小俊一起去接快往生的阿德叔，出院。",
+      image:"assets/wenlong-hospital.jpg",
+      likes:48, commentCount:44,
+      comments:[
+        {author:"wenlong_0707", text:"@linde_670607 為什麼你穿這套，那麼憨。"},
+        {author:"linde_670607", text:"乾你屁事，管好你自己。"}
+      ],
+      allowNewComments:true
+    },
+    {
+      id:"p13", author:"wenlong_0707", time:"8/2",
+      text:"阿龍伯被這個憨兒@renjian_0827嚇了一跳。",
+      image:"assets/wenlong-scared.jpg",
+      likes:40, commentCount:34,
+      comments:[
+        {author:"renjian_0827", text:"你自己朝我走過來的。"},
+        {author:"wenlong_0707", text:"好了啦，我坐好好的，你擺那個憨兒臉誰繃得住。"}
+      ],
+      allowNewComments:true
+    },
+    {
+      id:"p14", author:"wenlong_0707", time:"7/17",
+      text:"恭喜，我與阿德叔的老戰友，阿建爺，也使用Threads了！請大家多多關照，@renjian_0827這是我們以前，一起去玩的照片。",
+      image:"assets/wenlong-oldstreet.jpg",
+      likes:27, commentCount:18,
+      comments:[
+        {author:"renjian_0827", text:"那天真的很開心。"}
+      ],
+      allowNewComments:true
     }
   ];
 
   // 各帳號「串文」頁面顯示的公開貼文（key 為 handle）
   var profilePosts = {
-    "wenlong_0707": ["p1", "p2"],
+    "wenlong_0707": ["p1", "p10", "p2", "p11", "p12", "p13", "p14"],
     "williamchen0119": ["p3"],
     "linde_670607": ["p7", "p6", "p5", "p4"],
     "jiaxinchen0802": ["p9", "p8"]
   };
   var postsById = {
     "p1": feedPosts[0],
-    "p2": feedPosts[1],
+    "p10": feedPosts[1],
+    "p2": feedPosts[2],
+    "p11": feedPosts[3],
+    "p12": feedPosts[4],
+    "p13": feedPosts[5],
+    "p14": feedPosts[6],
     "p3": {
       id:"p3", author:"williamchen0119", time:"1天",
       text:"我老爸叫我來這裡，搜集罪犯的資訊，剛剛看了一下發現這裡的人很亂，我會好好嚴查。",
@@ -688,7 +762,7 @@
         html += '<div class="comment-item">';
         html += '<button type="button" class="comment-author" data-handle="' + c.author + '">' + escapeHTML(c.author) + '</button>';
         html += badge;
-        html += escapeHTML(c.text);
+        html += linkifyText(c.text);
         html += likes;
         html += '</div>';
       });
@@ -824,15 +898,19 @@
         list.appendChild(createCommentElement({authorLabel:"你", text:text}));
         input.value = "";
 
-        // ---- 特定貼文留下特定關鍵字，可能會觸發回覆 ----
-        // 在對應貼文的 autoReplies 陣列中新增 {trigger, author, text} 即可設定
+        // ---- 特定貼文留言內容涉及特定關鍵字，可能會觸發回覆 ----
+        // 在對應貼文的 autoReplies 陣列中新增 {keywords:[...], author, text} 即可設定
+        // 只要留言內容「包含」keywords 中任一關鍵字就會觸發
         var post = postsById[postId];
         if (post && post.autoReplies && post.autoReplies.length){
           var matched = null;
-          for (var i = 0; i < post.autoReplies.length; i++){
-            if (post.autoReplies[i].trigger === text){
-              matched = post.autoReplies[i];
-              break;
+          for (var i = 0; i < post.autoReplies.length && !matched; i++){
+            var rule = post.autoReplies[i];
+            for (var j = 0; j < rule.keywords.length; j++){
+              if (text.indexOf(rule.keywords[j]) !== -1){
+                matched = rule;
+                break;
+              }
             }
           }
           if (matched){

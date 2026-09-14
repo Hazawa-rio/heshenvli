@@ -232,11 +232,11 @@
   .post-username.static:hover{text-decoration:none;}
   .post-time{font-size:12px; color:#8B8B8B;}
   .feed-app .post-text{font-size:14.5px; margin:0 0 12px; color:#fff; max-width:none; white-space:pre-line;}
-  .post-text .mention{
+  .feed-app .mention{
     background:none; border:none; padding:0; cursor:pointer;
     color:#7FB2FF; font-size:inherit; font-family:inherit;
   }
-  .post-text .mention:hover{text-decoration:underline;}
+  .feed-app .mention:hover{text-decoration:underline;}
   .post-photo{width:100%; border-radius:10px; margin-bottom:10px;}
   .post-actions{display:flex; gap:18px; color:#C7C7C7; font-size:14px; margin-bottom:14px;}
 
@@ -497,7 +497,14 @@
       aliases: ["陳佳興", "佳興", "阿興", "佳興哥"]
     },
     "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
-    "chen_wanglin": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "chen_wanglin": {
+      name: "陳旺霖",
+      avatarImg: "assets/wanglin-avatar.jpg",
+      bio: "陳旺霖，飛行員，從小便嚮往自由和勇於挑戰與探索，性格爽朗直接，喜歡開口笑，由於喜歡獨善其身。",
+      tags: [],
+      stats: "",
+      aliases: ["陳旺霖", "旺霖"]
+    },
     "daojin.chen": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
     "muhammadchopravasani": {
       name: "小穆",
@@ -514,6 +521,21 @@
       tags: [],
       stats: "",
       aliases: ["阿建爺", "阿建"]
+    },
+    "wbcnews": {
+      name: "西森新聞",
+      avatarImg: "assets/wbc-logo.jpg",
+      bio: "在地新聞快報，即時掌握和善里大小事。",
+      tags: [],
+      stats: ""
+    },
+    "libang_07": {
+      name: "李邦詹",
+      avatarImg: "assets/libang-avatar.jpg",
+      bio: "",
+      tags: [],
+      stats: "",
+      aliases: ["李邦詹"]
     }
   };
 
@@ -702,6 +724,47 @@
       comments:[],
       allowNewComments:true,
       keywords:["মজুমদার"]
+    },
+    {
+      id:"h3", author:"wbcnews", time:"剛剛",
+      text:"驚！千萬超跑被砸 車主哭：一個月前買的 兇手竟是…",
+      image:"assets/lambo-smashed.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true,
+      keywords:["西森新聞"],
+      matches:function(q){
+        var hasName = q.indexOf("林應德") !== -1 || q.indexOf("阿德叔") !== -1;
+        var hasSmash = q.indexOf("砸車") !== -1;
+        return hasName && hasSmash;
+      }
+    },
+    {
+      id:"h4", author:"libang_07", time:"2026-9-2",
+      text:"2017年06/07，李邦詹於洛杉磯湖人隊砍下67分，三分命中率12中8，命中率高達67%。退役了以後，我常出沒於各野球場，今天24中16，FG：67%，砍下40分，但也不禁讓我想起，我是否再沒辦法砍下67分了呢…",
+      image:"assets/libang-dunk.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true,
+      keywords:["67"]
+    },
+    {
+      id:"h5", author:"libang_07", time:"2026-8-15",
+      text:"我終於跟我的偶像拍到照了！好開心 希望文龍叔叔可以來慶祝",
+      image:"assets/libang-lebron.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true,
+      keywords:["lebron james"]
+    },
+    {
+      id:"h6", author:"libang_07", time:"2026-7-8",
+      text:"昨天是文龍叔叔的生日，陪他去公園走走，但他一直罵我是黑軌，趕快去死一死…",
+      image:"assets/libang-park.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true,
+      keywords:["黑軌"]
     }
   ];
 
@@ -996,13 +1059,14 @@
   var storySearchInput = document.getElementById("storySearchInput");
 
   function findAccountByQuery(query){
-    if (accounts.hasOwnProperty(query)) return query;
+    var q = (query.charAt(0) === "@") ? query.slice(1) : query;
+    if (q === "") return null;
+    if (accounts.hasOwnProperty(q)) return q;
     for (var handle in accounts){
       var acc = accounts[handle];
-      if (acc.name && acc.name.indexOf(query) !== -1) return handle;
       if (acc.aliases){
         for (var i = 0; i < acc.aliases.length; i++){
-          if (acc.aliases[i].indexOf(query) !== -1) return handle;
+          if (acc.aliases[i].indexOf(q) !== -1) return handle;
         }
       }
     }
@@ -1023,7 +1087,12 @@
 
     var matches = hiddenPosts.filter(function(post){
       if (post.text.indexOf(query) !== -1) return true;
-      if (post.keywords && post.keywords.indexOf(query) !== -1) return true;
+      if (post.keywords){
+        for (var k = 0; k < post.keywords.length; k++){
+          if (post.keywords[k].toLowerCase() === query.toLowerCase()) return true;
+        }
+      }
+      if (post.matches && post.matches(query)) return true;
       return false;
     });
 

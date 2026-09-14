@@ -412,6 +412,7 @@
         因此，我們開設了人文紀事，讓里民可以登錄並分享自己的生活，
         讓社區的溫暖、有趣、歡喜的每個瞬間，可以一直在這裡記錄著。
       </p>
+      <p>人文紀事節錄了里民在社群媒體分享的生活點滴。</p>
       <button type="button" id="storiesConfirm">確定</button>
     </div>
   </div>
@@ -468,28 +469,32 @@
       avatarImg: "assets/wenlong-avatar.jpg",
       bio: "我是陳文龍，大安區街坊喚我阿龍伯。1958年7月7日生的巨蟹座，血型A。曾是熱血陸軍，現在最拿手滷肉與照顧蘭花。我愛在陽台泡茶、跟孫子恩俊自拍。人生嘛，像我最愛的姿勢一樣：比個「耶」就過去了！",
       tags: [{label:"廚藝"}, {label:"籃球", dot:"orange"}, {label:"棒球", dot:"red"}, {label:"種花"}, {label:"茶藝"}],
-      stats: "487 位粉絲・55 萬次最近瀏覽次數"
+      stats: "487 位粉絲・55 萬次最近瀏覽次數",
+      aliases: ["陳文龍", "阿龍伯", "阿龍"]
     },
     "williamchen0119": {
       name: "陳明安",
       avatarImg: "assets/mingan-avatar.jpg",
       bio: "我是大安分局局長陳明安。在此聲明，我的執法標準只有一條：法律與秩序，絕無模糊空間。職責所在，我不習慣客套，更不會開玩笑。絕不容許正義被捷徑或私權歪曲；維持公平與秩序，是我對這個社會唯一承諾的底線。",
       tags: [{label:"打擊犯罪"}],
-      stats: "20 位粉絲"
+      stats: "20 位粉絲",
+      aliases: ["陳明安", "明安"]
     },
     "linde_670607": {
       name: "林應德",
       avatarImg: "assets/linde-avatar.jpg",
       bio: "大家好我是林應德，大家可以叫我阿德叔",
       tags: [],
-      stats: "141 位粉絲・50 萬次最近瀏覽次數"
+      stats: "141 位粉絲・50 萬次最近瀏覽次數",
+      aliases: ["林應德", "阿德叔", "阿德"]
     },
     "jiaxinchen0802": {
       name: "陳佳興",
       avatarImg: "assets/jiaxin-avatar.jpg",
       bio: "你好👋🏻我是幽默風趣的佳興哥！ 可以親切的叫我阿興就好～ 很高興認識你們！ 讓我們將這份緣拓展下去❤️",
       tags: [],
-      stats: ""
+      stats: "",
+      aliases: ["陳佳興", "佳興", "阿興", "佳興哥"]
     },
     "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
     "chen_wanglin": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
@@ -499,14 +504,16 @@
       avatarImg: "assets/muhammad-avatar.jpg",
       bio: "老巷新聲成員，來自印度的小穆。",
       tags: [],
-      stats: ""
+      stats: "",
+      aliases: ["小穆"]
     },
     "renjian_0827": {
       name: "阿建爺",
       avatarLetter: "建",
       bio: "阿德叔的老戰友，人稱阿建爺。",
       tags: [],
-      stats: ""
+      stats: "",
+      aliases: ["阿建爺", "阿建"]
     }
   };
 
@@ -709,6 +716,19 @@
     return div.innerHTML;
   }
 
+  /* ---------- 自動回覆：一旦觸發就記住，不會被重新整理清掉，也只會觸發一次 ---------- */
+  function autoReplyKey(postId, ruleIndex){
+    return "storyReply_" + postId + "_" + ruleIndex;
+  }
+  function hasReplyFired(postId, ruleIndex){
+    try { return localStorage.getItem(autoReplyKey(postId, ruleIndex)) === "1"; }
+    catch (err){ return false; }
+  }
+  function markReplyFired(postId, ruleIndex){
+    try { localStorage.setItem(autoReplyKey(postId, ruleIndex), "1"); }
+    catch (err){ /* 忽略無法寫入的情況 */ }
+  }
+
   function renderAvatar(handle, sizeClass){
     var acc = accounts[handle];
     if (!acc) return "";
@@ -771,7 +791,21 @@
 
     if (post.allowNewComments){
       html += '<div class="comment-box">';
-      html += '<div class="comment-list new-comments" data-post-id="' + post.id + '"></div>';
+      html += '<div class="comment-list new-comments" data-post-id="' + post.id + '">';
+      if (post.autoReplies){
+        post.autoReplies.forEach(function(rule, idx){
+          if (hasReplyFired(post.id, idx)){
+            html += '<div class="comment-item">';
+            html += '<button type="button" class="comment-author" data-handle="' + rule.author + '">' + escapeHTML(rule.author) + '</button>';
+            html += escapeHTML(rule.text);
+            if (rule.likes != null){
+              html += '<span class="comment-likes">♥ ' + rule.likes + '</span>';
+            }
+            html += '</div>';
+          }
+        });
+      }
+      html += '</div>';
       html += '<form class="comment-form" data-post-id="' + post.id + '">';
       html += '<input type="text" placeholder="留言…" maxlength="120" aria-label="留言">';
       html += '<button type="submit">送出</button>';
@@ -782,9 +816,19 @@
     return html;
   }
 
+  function pickRandomPublicPosts(n){
+    var ids = Object.keys(postsById);
+    for (var i = ids.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
+    }
+    return ids.slice(0, n).map(function(id){ return postsById[id]; });
+  }
+
   function renderFeed(){
+    var randomPosts = pickRandomPublicPosts(3);
     var html = '<div class="feed-posts">';
-    feedPosts.forEach(function(post){
+    randomPosts.forEach(function(post){
       html += renderPost(post);
     });
     html += '</div>';
@@ -900,26 +944,29 @@
 
         // ---- 特定貼文留言內容涉及特定關鍵字，可能會觸發回覆 ----
         // 在對應貼文的 autoReplies 陣列中新增 {keywords:[...], author, text} 即可設定
-        // 只要留言內容「包含」keywords 中任一關鍵字就會觸發
+        // 只要留言內容「包含」keywords 中任一關鍵字就會觸發；每則回覆全站只會觸發一次，
+        // 觸發後會記住，不會被重新整理清掉
         var post = postsById[postId];
         if (post && post.autoReplies && post.autoReplies.length){
-          var matched = null;
-          for (var i = 0; i < post.autoReplies.length && !matched; i++){
+          var matchedIndex = -1;
+          for (var i = 0; i < post.autoReplies.length && matchedIndex === -1; i++){
             var rule = post.autoReplies[i];
             for (var j = 0; j < rule.keywords.length; j++){
               if (text.indexOf(rule.keywords[j]) !== -1){
-                matched = rule;
+                matchedIndex = i;
                 break;
               }
             }
           }
-          if (matched){
+          if (matchedIndex !== -1 && !hasReplyFired(postId, matchedIndex)){
+            var matched = post.autoReplies[matchedIndex];
             setTimeout(function(){
               list.appendChild(createCommentElement({
                 handle: matched.author,
                 text: matched.text,
                 likes: matched.likes
               }));
+              markReplyFired(postId, matchedIndex);
             }, 800);
           }
         }
@@ -944,14 +991,35 @@
     searchResultView.hidden = true;
   }
 
-  /* ---------- 搜尋：只用於捕捉不公開貼文的關鍵字 ---------- */
+  /* ---------- 搜尋：先比對人名／綽號直接跳到帳號，否則搜尋不公開貼文的關鍵字 ---------- */
   var storySearchForm = document.getElementById("storySearchForm");
   var storySearchInput = document.getElementById("storySearchInput");
+
+  function findAccountByQuery(query){
+    if (accounts.hasOwnProperty(query)) return query;
+    for (var handle in accounts){
+      var acc = accounts[handle];
+      if (acc.name && acc.name.indexOf(query) !== -1) return handle;
+      if (acc.aliases){
+        for (var i = 0; i < acc.aliases.length; i++){
+          if (acc.aliases[i].indexOf(query) !== -1) return handle;
+        }
+      }
+    }
+    return null;
+  }
 
   storySearchForm.addEventListener("submit", function(e){
     e.preventDefault();
     var query = storySearchInput.value.trim();
     if (query === "") return;
+
+    var accountMatch = findAccountByQuery(query);
+    if (accountMatch){
+      storySearchInput.value = "";
+      openProfile(accountMatch);
+      return;
+    }
 
     var matches = hiddenPosts.filter(function(post){
       if (post.text.indexOf(query) !== -1) return true;

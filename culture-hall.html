@@ -265,6 +265,14 @@
     color:#8B8B8B;
     margin-top:2px;
   }
+
+  /* 隱形留言：文字顏色與背景相同，看似空白，需反白（選取文字）才會顯現 */
+  .comment-item.comment-invisible,
+  .comment-item.comment-invisible .comment-author,
+  .comment-item.comment-invisible .comment-likes{
+    color:#0E0E10;
+  }
+
   .comment-form{display:flex; gap:8px;}
   .comment-form input{
     flex:1;
@@ -629,7 +637,8 @@
     "wenlong_0707": ["p1", "p10", "p2", "p11", "p12", "p13", "p14"],
     "williamchen0119": ["p3"],
     "linde_670607": ["p7", "p6", "p5", "p4"],
-    "jiaxinchen0802": ["p9", "p8"]
+    "jiaxinchen0802": ["p9", "p8"],
+    "chen_wanglin": ["p16", "p15"]
   };
   var postsById = {
     "p1": feedPosts[0],
@@ -639,6 +648,31 @@
     "p12": feedPosts[4],
     "p13": feedPosts[5],
     "p14": feedPosts[6],
+    "p15": {
+      id:"p15", author:"chen_wanglin", time:"8/20",
+      text:"大家好，我是陳旺霖，也可以叫我阿霖仔，很高興認識大家",
+      image:"assets/wanglin-intro.jpg",
+      likes:8, commentCount:14,
+      comments:[],
+      allowNewComments:true
+    },
+    "p16": {
+      id:"p16", author:"chen_wanglin", time:"8/27",
+      text:"今天去，鬼屋探險，沒想到居然有人。",
+      image:"assets/wanglin-hauntedhouse.jpg",
+      likes:11, commentCount:6,
+      comments:[
+        {author:"chen_wanglin", text:"如果你看見了這篇留言，請告訴我阿龍伯的標誌。", invisible:true}
+      ],
+      allowNewComments:true,
+      autoReplies:[
+        {
+          keywords:["耶", "比耶", "YA", "比YA"],
+          author:"chen_wanglin",
+          text:"很好，接下來告訴我阿健爺的。"
+        }
+      ]
+    },
     "p3": {
       id:"p3", author:"williamchen0119", time:"1天",
       text:"我老爸叫我來這裡，搜集罪犯的資訊，剛剛看了一下發現這裡的人很亂，我會好好嚴查。",
@@ -842,7 +876,8 @@
       post.comments.forEach(function(c){
         var badge = (c.author === post.author) ? '<span class="comment-badge">作者</span>' : '';
         var likes = (c.likes != null) ? '<span class="comment-likes">♥ ' + c.likes + '</span>' : '';
-        html += '<div class="comment-item">';
+        var hiddenClass = c.invisible ? ' comment-invisible' : '';
+        html += '<div class="comment-item' + hiddenClass + '">';
         html += '<button type="button" class="comment-author" data-handle="' + c.author + '">' + escapeHTML(c.author) + '</button>';
         html += badge;
         html += linkifyText(c.text);
@@ -1015,7 +1050,7 @@
           for (var i = 0; i < post.autoReplies.length && matchedIndex === -1; i++){
             var rule = post.autoReplies[i];
             for (var j = 0; j < rule.keywords.length; j++){
-              if (text.indexOf(rule.keywords[j]) !== -1){
+              if (text.toLowerCase().indexOf(rule.keywords[j].toLowerCase()) !== -1){
                 matchedIndex = i;
                 break;
               }

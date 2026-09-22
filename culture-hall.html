@@ -906,9 +906,10 @@
         post.autoReplies.forEach(function(rule, idx){
           var fired = getFiredReply(post.id, idx);
           if (fired){
+            var triggerDisplay = (fired.trigger && fired.trigger !== "") ? fired.trigger : rule.keywords[0];
             html += '<div class="comment-item">';
             html += '<b style="margin-right:6px;">你</b>';
-            html += escapeHTML(fired.trigger);
+            html += escapeHTML(triggerDisplay);
             html += '</div>';
 
             html += '<div class="comment-item">';

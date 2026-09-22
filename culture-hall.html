@@ -269,6 +269,7 @@
   /* 隱形留言：文字顏色與背景相同，看似空白，需反白（選取文字）才會顯現 */
   .comment-item.comment-invisible,
   .comment-item.comment-invisible .comment-author,
+  .comment-item.comment-invisible .comment-badge,
   .comment-item.comment-invisible .comment-likes{
     color:#0E0E10;
   }
@@ -669,7 +670,7 @@
         {
           keywords:["耶", "比耶", "YA", "比YA"],
           author:"chen_wanglin",
-          text:"很好，接下來告訴我阿健爺的。"
+          text:"很好，接下來告訴我阿建爺的。"
         },
         {
           keywords:["茶", "茶杯"],
@@ -818,17 +819,23 @@
     return div.innerHTML;
   }
 
-  /* ---------- 自動回覆：一旦觸發就記住，不會被重新整理清掉，也只會觸發一次 ---------- */
+  /* ---------- 自動回覆：一旦觸發就記住（連同玩家的觸發留言），不會被重新整理清掉，也只會觸發一次 ---------- */
   function autoReplyKey(postId, ruleIndex){
     return "storyReply_" + postId + "_" + ruleIndex;
   }
-  function hasReplyFired(postId, ruleIndex){
-    try { return localStorage.getItem(autoReplyKey(postId, ruleIndex)) === "1"; }
-    catch (err){ return false; }
+  function getFiredReply(postId, ruleIndex){
+    try {
+      var raw = localStorage.getItem(autoReplyKey(postId, ruleIndex));
+      return raw ? JSON.parse(raw) : null;
+    } catch (err){ return null; }
   }
-  function markReplyFired(postId, ruleIndex){
-    try { localStorage.setItem(autoReplyKey(postId, ruleIndex), "1"); }
-    catch (err){ /* 忽略無法寫入的情況 */ }
+  function hasReplyFired(postId, ruleIndex){
+    return getFiredReply(postId, ruleIndex) !== null;
+  }
+  function markReplyFired(postId, ruleIndex, triggerText){
+    try {
+      localStorage.setItem(autoReplyKey(postId, ruleIndex), JSON.stringify({trigger: triggerText}));
+    } catch (err){ /* 忽略無法寫入的情況 */ }
   }
 
   function renderAvatar(handle, sizeClass){
@@ -879,7 +886,7 @@
     if (post.comments && post.comments.length){
       html += '<div class="comment-list">';
       post.comments.forEach(function(c){
-        var badge = (c.author === post.author) ? '<span class="comment-badge">作者</span>' : '';
+        var badge = (c.author === post.author && !c.invisible) ? '<span class="comment-badge">作者</span>' : '';
         var likes = (c.likes != null) ? '<span class="comment-likes">♥ ' + c.likes + '</span>' : '';
         var hiddenClass = c.invisible ? ' comment-invisible' : '';
         html += '<div class="comment-item' + hiddenClass + '">';
@@ -897,7 +904,13 @@
       html += '<div class="comment-list new-comments" data-post-id="' + post.id + '">';
       if (post.autoReplies){
         post.autoReplies.forEach(function(rule, idx){
-          if (hasReplyFired(post.id, idx)){
+          var fired = getFiredReply(post.id, idx);
+          if (fired){
+            html += '<div class="comment-item">';
+            html += '<b style="margin-right:6px;">你</b>';
+            html += escapeHTML(fired.trigger);
+            html += '</div>';
+
             html += '<div class="comment-item">';
             html += '<button type="button" class="comment-author" data-handle="' + rule.author + '">' + escapeHTML(rule.author) + '</button>';
             html += escapeHTML(rule.text);
@@ -1069,7 +1082,7 @@
                 text: matched.text,
                 likes: matched.likes
               }));
-              markReplyFired(postId, matchedIndex);
+              markReplyFired(postId, matchedIndex, text);
             }, 800);
           }
         }

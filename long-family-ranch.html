@@ -306,6 +306,34 @@
     .ticket-stub{border-right:none; border-bottom:1.5px dashed var(--gold); padding:10px;}
     .postcard .note{max-width:100%;}
   }
+
+  /* ================= 線索便簽（可記錄文字，重新整理不會清空） ================= */
+  .clue-note{position:fixed; right:20px; bottom:20px; z-index:120;}
+  .clue-note-toggle{
+    width:52px; height:52px; border-radius:50%;
+    background:#F4D35E; border:none; box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-size:22px; cursor:pointer; line-height:1;
+  }
+  .clue-note-toggle:hover{background:#E9C13F;}
+  .clue-note-panel{
+    position:absolute; right:0; bottom:64px;
+    width:260px; background:#FDF6D8; border:1px solid #E4D48A;
+    box-shadow:0 10px 26px rgba(0,0,0,.25); padding:12px;
+  }
+  .clue-note-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; font-weight:700; color:#6B5A1E; margin-bottom:8px;
+  }
+  .clue-note-close{background:none; border:none; font-size:14px; cursor:pointer; color:#6B5A1E; padding:0;}
+  #clueNoteText{
+    width:100%; min-height:140px; resize:vertical; box-sizing:border-box;
+    border:1px solid #E4D48A; background:#FFFDF0;
+    font-family:inherit; font-size:13px; padding:8px; outline:none;
+    color:#3A3220;
+  }
+  @media (max-width:480px){
+    .clue-note-panel{width:calc(100vw - 40px);}
+  }
 </style>
 </head>
 <body>
@@ -472,6 +500,45 @@
     showConfirm("您已完成預約。");
   });
 </script>
+
+
+  <!-- ================= 線索便簽（可記錄文字，重新整理不會清空） ================= -->
+  <div class="clue-note" id="clueNote">
+    <button type="button" class="clue-note-toggle" id="clueNoteToggle" aria-label="開啟線索便簽">📝</button>
+    <div class="clue-note-panel" id="clueNotePanel" hidden>
+      <div class="clue-note-head">
+        <span>線索便簽</span>
+        <button type="button" class="clue-note-close" id="clueNoteClose" aria-label="關閉便簽">✕</button>
+      </div>
+      <textarea id="clueNoteText" placeholder="在這裡記下你發現的線索…" spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var CLUE_NOTE_KEY = "heshanliClueNotes";
+    var toggle = document.getElementById("clueNoteToggle");
+    var panel = document.getElementById("clueNotePanel");
+    var closeBtn = document.getElementById("clueNoteClose");
+    var textarea = document.getElementById("clueNoteText");
+
+    try {
+      var saved = localStorage.getItem(CLUE_NOTE_KEY);
+      if (saved !== null) textarea.value = saved;
+    } catch (err){ /* 忽略無法讀取的情況 */ }
+
+    toggle.addEventListener("click", function(){
+      panel.hidden = !panel.hidden;
+    });
+    closeBtn.addEventListener("click", function(){
+      panel.hidden = true;
+    });
+    textarea.addEventListener("input", function(){
+      try { localStorage.setItem(CLUE_NOTE_KEY, textarea.value); }
+      catch (err){ /* 忽略無法寫入的情況 */ }
+    });
+  })();
+  </script>
 
 </body>
 </html>

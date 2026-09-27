@@ -319,6 +319,34 @@
   .profile-subnav span{padding-bottom:10px;}
   .profile-subnav span.active{color:#fff; font-weight:700; border-bottom:2px solid #fff;}
   .profile-empty{font-size:13px; color:#8B8B8B; padding:6px 0;}
+
+  /* ================= 線索便簽（可記錄文字，重新整理不會清空） ================= */
+  .clue-note{position:fixed; right:20px; bottom:20px; z-index:120;}
+  .clue-note-toggle{
+    width:52px; height:52px; border-radius:50%;
+    background:#F4D35E; border:none; box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-size:22px; cursor:pointer; line-height:1;
+  }
+  .clue-note-toggle:hover{background:#E9C13F;}
+  .clue-note-panel{
+    position:absolute; right:0; bottom:64px;
+    width:260px; background:#FDF6D8; border:1px solid #E4D48A;
+    box-shadow:0 10px 26px rgba(0,0,0,.25); padding:12px;
+  }
+  .clue-note-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; font-weight:700; color:#6B5A1E; margin-bottom:8px;
+  }
+  .clue-note-close{background:none; border:none; font-size:14px; cursor:pointer; color:#6B5A1E; padding:0;}
+  #clueNoteText{
+    width:100%; min-height:140px; resize:vertical; box-sizing:border-box;
+    border:1px solid #E4D48A; background:#FFFDF0;
+    font-family:inherit; font-size:13px; padding:8px; outline:none;
+    color:#3A3220;
+  }
+  @media (max-width:480px){
+    .clue-note-panel{width:calc(100vw - 40px);}
+  }
 </style>
 </head>
 <body>
@@ -545,6 +573,29 @@
       tags: [],
       stats: "",
       aliases: ["李邦詹"]
+    },
+    "tangpopo064": {
+      name: "湯慧珍",
+      avatarImg: "assets/tangpo-avatar.jpg",
+      bio: "笑口常開，口說好話\n心中保持善念，快快樂樂過每分每秒",
+      tags: [],
+      stats: "",
+      aliases: ["湯慧珍", "湯婆婆"]
+    },
+    "akhunpah": {
+      name: "楊立崑",
+      avatarImg: "assets/akhun-avatar.jpg",
+      bio: "阿崑伯👴🍂\n正港台灣歐吉桑。\n愛喝茶☕️、開槓🗣️、老派智慧分享📚\n彰化人來到大安，歡迎來作客！🍵",
+      tags: [],
+      stats: "",
+      aliases: ["楊立崑", "阿崑伯"]
+    },
+    "tangpo_0912": {
+      name: "湯記小吃",
+      avatarImg: "assets/tangji-avatar.jpg",
+      bio: "湯記小吃官方帳號，不定時公告最新消息與活動。",
+      tags: [],
+      stats: ""
     }
   };
 
@@ -639,7 +690,10 @@
     "williamchen0119": ["p3"],
     "linde_670607": ["p7", "p6", "p5", "p4"],
     "jiaxinchen0802": ["p9", "p8"],
-    "chen_wanglin": ["p16", "p15"]
+    "chen_wanglin": ["p16", "p15"],
+    "tangpopo064": ["p19", "p18", "p17"],
+    "akhunpah": ["p20"],
+    "tangpo_0912": ["p23", "p22", "p21"]
   };
   var postsById = {
     "p1": feedPosts[0],
@@ -678,6 +732,65 @@
           text:"我認為我可以信任你，我們稍後聯絡，在這之前，大哥有寫日記的習慣，在他的頁面搜索，或許你能找到想要的線索。"
         }
       ]
+    },
+    "p17": {
+      id:"p17", author:"tangpopo064", time:"8/2",
+      text:"各位早安湯婆婆，老當益壯健步如飛。",
+      image:"assets/tangpo-gym.jpg",
+      likes:15, commentCount:7,
+      comments:[],
+      allowNewComments:true
+    },
+    "p18": {
+      id:"p18", author:"tangpopo064", time:"8/10",
+      text:"湯婆婆跑來國民運動中心游泳。",
+      image:"assets/tangpo-pool.jpg",
+      likes:10, commentCount:6,
+      comments:[],
+      allowNewComments:true
+    },
+    "p19": {
+      id:"p19", author:"tangpopo064", time:"2天前",
+      text:"好久不見婆婆我前陣子住院幾個禮拜，命是撿回來的，幸好台灣的醫療很厲害，孫子幫我拿保險理賠買了一輛新車，真開心。",
+      image:"assets/tangpo-rehab.jpg",
+      likes:15, commentCount:11,
+      comments:[
+        {author:"akhunpah", text:"原來你住院了，我昨天還看到你在開店，跟你打招呼你也不理人。"},
+        {author:"tangpopo064", text:"應該是朋友來代班，她長得跟婆婆比較像。"}
+      ],
+      allowNewComments:true
+    },
+    "p20": {
+      id:"p20", author:"akhunpah", time:"8/24",
+      text:"阿崑伯第一次下廚。",
+      image:"assets/akhun-cooking.jpg",
+      likes:26, commentCount:47,
+      comments:[],
+      allowNewComments:true
+    },
+    "p21": {
+      id:"p21", author:"tangpo_0912", time:"6/12",
+      text:"湯記小吃正式開通社群帳號！之後會不定時公告最新消息與活動，歡迎大家多多關注。",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p22": {
+      id:"p22", author:"tangpo_0912", time:"8/11",
+      text:"公告：老闆娘湯婆婆身體不適、發燒，今日公休一天，造成不便敬請見諒，明日恢復正常營業。",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p23": {
+      id:"p23", author:"tangpo_0912", time:"3天前",
+      text:"湯記小吃和善里茶樓合作，只要在茶樓登記名字，湯記小吃免費送一盤豆干！",
+      image:"assets/tangji-shop.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
     },
     "p3": {
       id:"p3", author:"williamchen0119", time:"1天",
@@ -819,25 +932,6 @@
     return div.innerHTML;
   }
 
-  /* ---------- 自動回覆：一旦觸發就記住（連同玩家的觸發留言），不會被重新整理清掉，也只會觸發一次 ---------- */
-  function autoReplyKey(postId, ruleIndex){
-    return "storyReply_" + postId + "_" + ruleIndex;
-  }
-  function getFiredReply(postId, ruleIndex){
-    try {
-      var raw = localStorage.getItem(autoReplyKey(postId, ruleIndex));
-      return raw ? JSON.parse(raw) : null;
-    } catch (err){ return null; }
-  }
-  function hasReplyFired(postId, ruleIndex){
-    return getFiredReply(postId, ruleIndex) !== null;
-  }
-  function markReplyFired(postId, ruleIndex, triggerText){
-    try {
-      localStorage.setItem(autoReplyKey(postId, ruleIndex), JSON.stringify({trigger: triggerText}));
-    } catch (err){ /* 忽略無法寫入的情況 */ }
-  }
-
   function renderAvatar(handle, sizeClass){
     var acc = accounts[handle];
     if (!acc) return "";
@@ -901,28 +995,7 @@
 
     if (post.allowNewComments){
       html += '<div class="comment-box">';
-      html += '<div class="comment-list new-comments" data-post-id="' + post.id + '">';
-      if (post.autoReplies){
-        post.autoReplies.forEach(function(rule, idx){
-          var fired = getFiredReply(post.id, idx);
-          if (fired){
-            var triggerDisplay = (fired.trigger && fired.trigger !== "") ? fired.trigger : rule.keywords[0];
-            html += '<div class="comment-item">';
-            html += '<b style="margin-right:6px;">你</b>';
-            html += escapeHTML(triggerDisplay);
-            html += '</div>';
-
-            html += '<div class="comment-item">';
-            html += '<button type="button" class="comment-author" data-handle="' + rule.author + '">' + escapeHTML(rule.author) + '</button>';
-            html += escapeHTML(rule.text);
-            if (rule.likes != null){
-              html += '<span class="comment-likes">♥ ' + rule.likes + '</span>';
-            }
-            html += '</div>';
-          }
-        });
-      }
-      html += '</div>';
+      html += '<div class="comment-list new-comments" data-post-id="' + post.id + '"></div>';
       html += '<form class="comment-form" data-post-id="' + post.id + '">';
       html += '<input type="text" placeholder="留言…" maxlength="120" aria-label="留言">';
       html += '<button type="submit">送出</button>';
@@ -1061,8 +1134,8 @@
 
         // ---- 特定貼文留言內容涉及特定關鍵字，可能會觸發回覆 ----
         // 在對應貼文的 autoReplies 陣列中新增 {keywords:[...], author, text} 即可設定
-        // 只要留言內容「包含」keywords 中任一關鍵字就會觸發；每則回覆全站只會觸發一次，
-        // 觸發後會記住，不會被重新整理清掉
+        // 只要留言內容「包含」keywords 中任一關鍵字就會觸發；可重複觸發，
+        // 回覆會間隔幾秒後才出現，且不會保留到下次重新整理
         var post = postsById[postId];
         if (post && post.autoReplies && post.autoReplies.length){
           var matchedIndex = -1;
@@ -1075,7 +1148,7 @@
               }
             }
           }
-          if (matchedIndex !== -1 && !hasReplyFired(postId, matchedIndex)){
+          if (matchedIndex !== -1){
             var matched = post.autoReplies[matchedIndex];
             setTimeout(function(){
               list.appendChild(createCommentElement({
@@ -1083,8 +1156,7 @@
                 text: matched.text,
                 likes: matched.likes
               }));
-              markReplyFired(postId, matchedIndex, text);
-            }, 800);
+            }, 2500);
           }
         }
       });
@@ -1158,6 +1230,45 @@
 
   renderFeed();
 </script>
+
+
+  <!-- ================= 線索便簽（可記錄文字，重新整理不會清空） ================= -->
+  <div class="clue-note" id="clueNote">
+    <button type="button" class="clue-note-toggle" id="clueNoteToggle" aria-label="開啟線索便簽">📝</button>
+    <div class="clue-note-panel" id="clueNotePanel" hidden>
+      <div class="clue-note-head">
+        <span>線索便簽</span>
+        <button type="button" class="clue-note-close" id="clueNoteClose" aria-label="關閉便簽">✕</button>
+      </div>
+      <textarea id="clueNoteText" placeholder="在這裡記下你發現的線索…" spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var CLUE_NOTE_KEY = "heshanliClueNotes";
+    var toggle = document.getElementById("clueNoteToggle");
+    var panel = document.getElementById("clueNotePanel");
+    var closeBtn = document.getElementById("clueNoteClose");
+    var textarea = document.getElementById("clueNoteText");
+
+    try {
+      var saved = localStorage.getItem(CLUE_NOTE_KEY);
+      if (saved !== null) textarea.value = saved;
+    } catch (err){ /* 忽略無法讀取的情況 */ }
+
+    toggle.addEventListener("click", function(){
+      panel.hidden = !panel.hidden;
+    });
+    closeBtn.addEventListener("click", function(){
+      panel.hidden = true;
+    });
+    textarea.addEventListener("input", function(){
+      try { localStorage.setItem(CLUE_NOTE_KEY, textarea.value); }
+      catch (err){ /* 忽略無法寫入的情況 */ }
+    });
+  })();
+  </script>
 
 </body>
 </html>

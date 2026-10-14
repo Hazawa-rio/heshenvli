@@ -211,6 +211,7 @@
   .search-note{font-size:13px; color:#8B8B8B; margin:2px 2px 14px;}
 
   .feed-posts{display:flex; flex-direction:column; gap:22px;}
+  .feed-app .trap-text{color:#D8261E; font-weight:700;}
   .feed-post + .feed-post{padding-top:22px; border-top:1px solid #1E1E20;}
 
   .post-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
@@ -593,7 +594,7 @@
     "tangpo_0912": {
       name: "湯記小吃",
       avatarImg: "assets/tangji-avatar.jpg",
-      bio: "湯記小吃官方帳號，不定時公告最新消息與活動。",
+      bio: "湯記小吃官方帳號，由老闆娘湯婆婆親自運營，不定時公告最新消息與活動。",
       tags: [],
       stats: ""
     }
@@ -693,7 +694,7 @@
     "chen_wanglin": ["p16", "p15"],
     "tangpopo064": ["p19", "p18", "p17"],
     "akhunpah": ["p20"],
-    "tangpo_0912": ["p23", "p22", "p21"]
+    "tangpo_0912": ["p23", "p24", "p25", "p26", "p27", "p28", "p22", "p21"]
   };
   var postsById = {
     "p1": feedPosts[0],
@@ -788,6 +789,46 @@
       id:"p23", author:"tangpo_0912", time:"3天前",
       text:"湯記小吃和善里茶樓合作，只要在茶樓登記名字，湯記小吃免費送一盤豆干！",
       image:"assets/tangji-shop.jpg",
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p24": {
+      id:"p24", author:"tangpo_0912", time:"8/12",
+      text:"新菜色上架：皮蛋豆腐",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p25": {
+      id:"p25", author:"tangpo_0912", time:"8/12",
+      text:"新菜色上架：榨菜肉絲麵",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p26": {
+      id:"p26", author:"tangpo_0912", time:"8/12",
+      text:"新菜色上架：楊州炒飯",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p27": {
+      id:"p27", author:"tangpo_0912", time:"8/12",
+      text:"新菜色上架：牛肉湯",
+      image:null,
+      likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p28": {
+      id:"p28", author:"tangpo_0912", time:"8/12",
+      text:"新菜色上架：蝦仁炒飯",
+      image:null,
       likes:null, commentCount:null,
       comments:[],
       allowNewComments:true
@@ -1062,8 +1103,102 @@
     }
 
     profileView.innerHTML = html;
+    profileView.dataset.handle = handle;
+    resetTrap();
     bindDynamicHandlers(profileView);
   }
+
+  /* ---------- 湯記小吃：往上滑回菜色貼文時的詭異捲動陷阱 ---------- */
+  var trap = null;
+  var trapDone = false;
+  function resetTrap(){
+    document.documentElement.style.overflowAnchor = "";
+    trap = {reachedBottom:false, active:false, released:trapDone, upStart:0, lastUp:0, lastY:window.scrollY, count:0, raf:0};
+  }
+  resetTrap();
+
+  function trapPostEl(text){
+    var el = document.createElement("article");
+    el.className = "feed-post trap-post";
+    el.innerHTML = '<header class="post-head">' + renderAvatar("tangpo_0912") +
+      '<div class="post-who"><span class="post-username static">tangpo_0912</span><span class="post-time">剛剛</span></div></header>' +
+      '<p class="post-text trap-text">' + text + '</p>';
+    return el;
+  }
+
+  function trapFill(){
+    var first = document.getElementById("profileView").querySelector(".trap-post, .feed-post:nth-child(2)");
+    var p23 = profileView.querySelector(".feed-post");
+    if (!first || !p23) return;
+    var guard = 0;
+    while (p23.getBoundingClientRect().bottom > -1800 && guard++ < 40){
+      var top = profileView.querySelector(".trap-post") || profileView.querySelectorAll(".feed-post")[1];
+      var before = top.getBoundingClientRect().top;
+      var el = trapPostEl(trap.count === 0 ? "湯婆婆上架了郭楷杰" : "湯婆婆今天被上架了");
+      trap.count++;
+      top.parentNode.insertBefore(el, top);
+      var shift = top.getBoundingClientRect().top - before;
+      window.scrollBy(0, shift);
+    }
+    trap.lastY = window.scrollY;
+  }
+
+  function trapRelease(){
+    trap.released = true;
+    trapDone = true;
+    trap.active = false;
+  }
+
+  function trapTick(){
+    trap.raf = 0;
+    if (trap.active) trapFill();
+  }
+
+  window.addEventListener("scroll", function(){
+    if (profileView.hidden || profileView.dataset.handle !== "tangpo_0912" || !trap) return;
+    var y = window.scrollY, now = Date.now();
+    var doc = document.documentElement;
+
+    if (y + window.innerHeight >= doc.scrollHeight - 40 && !trap.released) trap.reachedBottom = true;
+
+    var dir = y < trap.lastY ? -1 : (y > trap.lastY ? 1 : 0);
+    trap.lastY = y;
+
+    if (trap.released){
+      var p23 = profileView.querySelector(".feed-post");
+      if (p23 && p23.getBoundingClientRect().bottom > 0){
+        var reds = profileView.querySelectorAll(".trap-post");
+        for (var i = 0; i < reds.length; i++) reds[i].remove();
+        doc.style.overflowAnchor = "";
+      }
+      return;
+    }
+
+    if (!trap.active){
+      if (trap.reachedBottom && dir === -1){
+        var lastDish = profileView.querySelectorAll(".feed-post")[5];
+        if (lastDish){
+          var r = lastDish.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0){
+            trap.active = true;
+            trap.upStart = now;
+            trap.lastUp = now;
+            doc.style.overflowAnchor = "none";
+          }
+        }
+      }
+    } else if (dir === -1){
+      if (now - trap.lastUp > 900) trap.upStart = now;
+      trap.lastUp = now;
+      if (now - trap.upStart >= 4800){
+        trapRelease();
+        return;
+      }
+    } else if (dir === 1){
+      trap.upStart = now;
+    }
+    if (trap.active && !trap.raf) trap.raf = requestAnimationFrame(trapTick);
+  }, {passive:true});
 
   function renderSearchResults(query, matches){
     var html = '<button type="button" class="back-btn" data-back="feed">← 返回動態</button>';

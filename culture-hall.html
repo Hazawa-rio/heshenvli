@@ -534,7 +534,38 @@
       stats: "",
       aliases: ["陳佳興", "佳興", "阿興", "佳興哥"]
     },
-    "chengingtsai16888": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "chengingtsai16888": {
+      name: "陳進財",
+      avatarImg: "assets/jincai-avatar.jpg",
+      bio: "和善里里長。陳進財\n請多多指教囉！",
+      tags: [],
+      stats: "",
+      aliases: ["陳進財", "進財", "里長"]
+    },
+    "bee.67219044": {
+      name: "蜂王教主林桓御",
+      avatarImg: "assets/bee-avatar.jpg",
+      bio: "",
+      tags: [],
+      stats: "",
+      aliases: ["林桓御", "蜂王教主", "蜂王", "林來蜂"]
+    },
+    "swan.68676767": {
+      name: "馬主滸",
+      avatarImg: "assets/swan-avatar.jpg",
+      bio: "我是馬主滸，我在做一件只有我才懂的偉大決定。",
+      tags: [],
+      stats: "",
+      aliases: ["馬主滸", "阿狗"]
+    },
+    "paint.1268": {
+      name: "油漆人（呂昌勻）",
+      avatarImg: "assets/paint-avatar.jpg",
+      bio: "真正的藝術",
+      tags: [],
+      stats: "",
+      aliases: ["油漆人", "呂昌勻"]
+    },
     "chen_wanglin": {
       name: "陳旺霖",
       avatarImg: "assets/wanglin-avatar.jpg",
@@ -543,7 +574,14 @@
       stats: "",
       aliases: ["陳旺霖", "旺霖"]
     },
-    "daojin.chen": {name:"", avatarLetter:"?", bio:"帳號整理中，敬請期待。", tags:[], stats:""},
+    "daojin.chen": {
+      name: "陳道京（鈴木道京）",
+      avatarImg: "assets/daojin-avatar.jpg",
+      bio: "我從小就喜歡煮飯😍\n爸爸常說我心思細膩😉\n最擅長用黃豆Emoji😘",
+      tags: [],
+      stats: "",
+      aliases: ["陳道京", "鈴木道京", "道京"]
+    },
     "muhammadchopravasani": {
       name: "小穆",
       avatarImg: "assets/muhammad-avatar.jpg",
@@ -554,8 +592,8 @@
     },
     "renjian_0827": {
       name: "阿建爺",
-      avatarLetter: "建",
-      bio: "阿德叔的老戰友，人稱阿建爺。",
+      avatarImg: "assets/renjian-avatar.jpg",
+      bio: "",
       tags: [],
       stats: "",
       aliases: ["阿建爺", "阿建"]
@@ -694,6 +732,12 @@
     "chen_wanglin": ["p16", "p15"],
     "tangpopo064": ["p19", "p18", "p17"],
     "akhunpah": ["p20"],
+    "renjian_0827": ["p30", "p29"],
+    "daojin.chen": ["p35", "p34"],
+    "bee.67219044": ["p36"],
+    "swan.68676767": ["p37"],
+    "paint.1268": ["p38", "p39", "p40"],
+    "chengingtsai16888": ["p33", "p32", "p31"],
     "tangpo_0912": ["p23", "p24", "p25", "p26", "p27", "p28", "p22", "p21"]
   };
   var postsById = {
@@ -830,6 +874,110 @@
       text:"新菜色上架：蝦仁炒飯",
       image:null,
       likes:null, commentCount:null,
+      comments:[],
+      allowNewComments:true
+    },
+    "p29": {
+      id:"p29", author:"renjian_0827", time:"7/23",
+      text:"阿健爺在日本玩的照片",
+      image:"assets/renjian-japan.jpg",
+      likes:11, commentCount:10,
+      comments:[
+        {author:"wenlong_0707", text:"看個富士山，還要帶茶去，是腦子有洞嗎？"}
+      ],
+      allowNewComments:true
+    },
+    "p30": {
+      id:"p30", author:"renjian_0827", time:"9/1",
+      text:"阿建爺今天下午邀請阿龍伯陪我下棋。",
+      image:"assets/renjian-chess.jpg",
+      likes:null, commentCount:null,
+      comments:[
+        {author:"renjian_0827", text:"他爛到有剩"}
+      ],
+      allowNewComments:true
+    },
+    "p31": {
+      id:"p31", author:"chengingtsai16888", time:"7/6",
+      text:"今天下午的里民服務。\n希望有幫助到大家。",
+      image:"assets/jincai-service.jpg",
+      likes:26, commentCount:8,
+      comments:[],
+      allowNewComments:true
+    },
+    "p32": {
+      id:"p32", author:"chengingtsai16888", time:"7/7",
+      text:"我的爸爸 陳文龍。\n今天過生日\n今年68歲 。他平常都很開心 看起來很年輕\n美好的時光。",
+      image:"assets/jincai-tea.jpg",
+      likes:51, commentCount:10,
+      comments:[],
+      allowNewComments:true
+    },
+    "p33": {
+      id:"p33", author:"chengingtsai16888", time:"7/17",
+      text:"最近都在忙著最後階段的里民服務。\n我的爸爸陳文龍今天幫我拉票。\n謝謝大家的支持。",
+      image:"assets/jincai-campaign.jpg",
+      likes:18, commentCount:4,
+      comments:[],
+      allowNewComments:true
+    },
+    "p34": {
+      id:"p34", author:"daojin.chen", time:"8/21",
+      text:"我叫做陳道京是陳文龍的兒子\n從小就喜歡煮飯🍜\n剛剛創了個Threads帳號",
+      image:"assets/daojin-post.jpg",
+      likes:29, commentCount:25,
+      comments:[],
+      allowNewComments:true
+    },
+    "p35": {
+      id:"p35", author:"daojin.chen", time:"8/30",
+      text:"哪來的流浪漢？",
+      image:"assets/daojin-bee.jpg",
+      likes:11, commentCount:7,
+      comments:[
+        {author:"bee.67219044", text:"教主我來嗡 教你嗡 做蜂蜜料理。"}
+      ],
+      allowNewComments:true
+    },
+    "p36": {
+      id:"p36", author:"bee.67219044", time:"8/29",
+      text:"王教嗡的核心教義嗡非常嗡簡單：凡人的生命嗡短暫嗡且充滿痛苦嗡唯有「蜂蜜」才是嗡宇宙間永恆嗡不滅嗡的救贖。",
+      image:"assets/bee-post.jpg",
+      likes:5, commentCount:6,
+      comments:[
+        {author:"linde_670607", text:"甚麼鬼邪教"}
+      ],
+      allowNewComments:true
+    },
+    "p37": {
+      id:"p37", author:"swan.68676767", time:"8/24",
+      text:"我是阿狗",
+      image:"assets/swan-post.jpg",
+      likes:6, commentCount:4,
+      comments:[],
+      allowNewComments:true
+    },
+    "p38": {
+      id:"p38", author:"paint.1268", time:"8/24",
+      text:"😨",
+      image:"assets/paint-1.jpg",
+      likes:2, commentCount:0,
+      comments:[],
+      allowNewComments:true
+    },
+    "p39": {
+      id:"p39", author:"paint.1268", time:"8/24",
+      text:"🤭",
+      image:"assets/paint-2.jpg",
+      likes:2, commentCount:0,
+      comments:[],
+      allowNewComments:true
+    },
+    "p40": {
+      id:"p40", author:"paint.1268", time:"8/24",
+      text:"😁",
+      image:"assets/paint-3.jpg",
+      likes:2, commentCount:0,
       comments:[],
       allowNewComments:true
     },
@@ -1048,7 +1196,7 @@
   }
 
   function pickRandomPublicPosts(n){
-    var ids = Object.keys(postsById);
+    var ids = Object.keys(postsById).filter(function(id){ return postsById[id].author !== "tangpo_0912"; });
     for (var i = ids.length - 1; i > 0; i--){
       var j = Math.floor(Math.random() * (i + 1));
       var tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
@@ -1075,7 +1223,7 @@
     html += renderAvatar(handle, "profile-avatar");
     html += '<div><h3>' + escapeHTML(acc.name || handle) + '</h3><span class="profile-handle">' + escapeHTML(handle) + '</span></div>';
     html += '</div>';
-    html += '<p class="profile-bio">' + escapeHTML(acc.bio || "") + '</p>';
+    if (acc.bio) html += '<p class="profile-bio">' + escapeHTML(acc.bio) + '</p>';
 
     if (acc.tags && acc.tags.length){
       html += '<div class="profile-tags">';
@@ -1338,6 +1486,11 @@
     e.preventDefault();
     var query = storySearchInput.value.trim();
     if (query === "") return;
+
+    if (query === "日記" && !profileView.hidden && profileView.dataset.handle === "jiaxinchen0802"){
+      window.location.href = "jiaxing-diary.html";
+      return;
+    }
 
     var accountMatch = findAccountByQuery(query);
     if (accountMatch){

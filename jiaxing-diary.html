@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>佳哥興的平靜生活</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#FBF6EC; --card:#FFFDF8; --ink:#3A2F25; --muted:#8A7B6A; --accent:#E07A3F; --line:#EADFCB;}
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC",sans-serif; line-height:1.8;}
+  header.blog-head{text-align:center; padding:48px 20px 28px; border-bottom:2px dashed var(--line);}
+  .blog-head img{width:84px; height:84px; border-radius:50%; object-fit:cover; border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.15);}
+  .blog-head h1{font-family:"Noto Serif TC",serif; font-size:30px; margin:12px 0 4px;}
+  .blog-head p{margin:0; color:var(--muted); font-size:14px;}
+  main{max-width:720px; margin:0 auto; padding:28px 18px 100px;}
+  .back{display:inline-block; margin-bottom:18px; color:var(--muted); font-size:14px; text-decoration:none;}
+  .back:hover{color:var(--accent);}
+  .entry{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:18px; box-shadow:0 2px 0 var(--line);}
+  .entry-top{display:flex; justify-content:space-between; align-items:center; gap:12px;}
+  .entry h2{font-family:"Noto Serif TC",serif; font-size:20px; margin:0;}
+  .entry .no{color:var(--accent); font-weight:700; font-size:13px; letter-spacing:.1em;}
+  .lock-btn{border:1px solid var(--line); background:#fff; border-radius:20px; padding:6px 14px; cursor:pointer; font-size:14px; font-family:inherit;}
+  .lock-btn:hover{border-color:var(--accent); color:var(--accent);}
+  .entry-body{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); white-space:pre-line;}
+  .unlock-row{display:none; margin-top:14px; gap:8px;}
+  .unlock-row.show{display:flex; flex-wrap:wrap;}
+  .unlock-row input{flex:1; min-width:160px; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:15px; font-family:inherit;}
+  .unlock-row button{padding:8px 16px; border:none; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; font-family:inherit;}
+  .err{color:#C0392B; font-size:13px; width:100%; min-height:1em;}
+  footer{text-align:center; color:var(--muted); font-size:12px; padding:20px;}
+  .clue-note{position:fixed; right:20px; bottom:20px; z-index:120;}
+  .clue-note-toggle{
+    width:52px; height:52px; border-radius:50%;
+    background:#F4D35E; border:none; box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-size:22px; cursor:pointer; line-height:1;
+  }
+  .clue-note-toggle:hover{background:#E9C13F;}
+  .clue-note-panel{
+    position:absolute; right:0; bottom:64px;
+    width:260px; background:#FDF6D8; border:1px solid #E4D48A;
+    box-shadow:0 10px 26px rgba(0,0,0,.25); padding:12px;
+  }
+  .clue-note-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; font-weight:700; color:#6B5A1E; margin-bottom:8px;
+  }
+  .clue-note-close{background:none; border:none; font-size:14px; cursor:pointer; color:#6B5A1E; padding:0;}
+  #clueNoteText{
+    width:100%; min-height:140px; resize:vertical; box-sizing:border-box;
+    border:1px solid #E4D48A; background:#FFFDF0;
+    font-family:inherit; font-size:13px; padding:8px; outline:none;
+    color:#3A3220;
+  }
+  @media (max-width:480px){
+    .clue-note-panel{width:calc(100vw - 40px);}
+  }
+</style>
+</head>
+<body>
+<header class="blog-head">
+  <img src="assets/jiaxin-avatar.jpg" alt="佳哥興">
+  <h1>佳哥興的平靜生活</h1>
+  <p>記錄生活的時候，我也放下我的生活，品味我平靜的日子，感覺就像是老爸和兒子共同創作的那首歌一樣～</p>
+</header>
+<main>
+  <a class="back" href="culture-hall.html">← 回到和善里文化展館</a>
+  <div id="entries"></div>
+</main>
+<footer>本網站內容人事物，均為虛擬創作，與現實無關。</footer>
+
+<script>
+  /* ====== 日記設定：password 為解鎖密碼，content 為日記內容 ======
+     第一篇密碼：由阿龍伯與小俊的資料推知（茶語時光）。
+     第二、三篇密碼與三篇內容尚未提供，之後補上。 */
+  var DIARIES = [
+    {no:"第一篇", title:"日記 · 一", password:"茶語時光", content:"（內容待補）"},
+    {no:"第二篇", title:"日記 · 二", password:"__TODO_2__", content:"（內容待補）"},
+    {no:"第三篇", title:"日記 · 三", password:"__TODO_3__", content:"（內容待補）"}
+  ];
+
+  var wrap = document.getElementById("entries");
+  DIARIES.forEach(function(d, i){
+    var box = document.createElement("section");
+    box.className = "entry";
+    box.innerHTML =
+      '<div class="entry-top"><div><div class="no"></div><h2></h2></div>' +
+      '<button type="button" class="lock-btn">🔒 輸入密碼</button></div>' +
+      '<div class="unlock-row"><input type="password" placeholder="請輸入密碼" autocomplete="off">' +
+      '<button type="button">解鎖</button><div class="err"></div></div>';
+    box.querySelector(".no").textContent = d.no;
+    box.querySelector("h2").textContent = d.title;
+    var lockBtn = box.querySelector(".lock-btn");
+    var row = box.querySelector(".unlock-row");
+    var input = row.querySelector("input");
+    var err = row.querySelector(".err");
+    lockBtn.addEventListener("click", function(){ row.classList.toggle("show"); if (row.classList.contains("show")) input.focus(); });
+    function tryUnlock(){
+      if (input.value.trim() === d.password){
+        row.remove();
+        lockBtn.textContent = "🔓 已解鎖";
+        lockBtn.disabled = true;
+        var body = document.createElement("div");
+        body.className = "entry-body";
+        body.textContent = d.content;
+        box.appendChild(body);
+      } else {
+        err.textContent = "密碼錯誤，請再試一次。";
+      }
+    }
+    row.querySelector("button").addEventListener("click", tryUnlock);
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+    wrap.appendChild(box);
+  });
+</script>
+
+  <!-- ================= 線索便簽（可記錄文字，重新整理不會清空） ================= -->
+  <div class="clue-note" id="clueNote">
+    <button type="button" class="clue-note-toggle" id="clueNoteToggle" aria-label="開啟線索便簽">📝</button>
+    <div class="clue-note-panel" id="clueNotePanel" hidden>
+      <div class="clue-note-head">
+        <span>線索便簽</span>
+        <button type="button" class="clue-note-close" id="clueNoteClose" aria-label="關閉便簽">✕</button>
+      </div>
+      <textarea id="clueNoteText" placeholder="在這裡記下你發現的線索…" spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var CLUE_NOTE_KEY = "heshanliClueNotes";
+    var toggle = document.getElementById("clueNoteToggle");
+    var panel = document.getElementById("clueNotePanel");
+    var closeBtn = document.getElementById("clueNoteClose");
+    var textarea = document.getElementById("clueNoteText");
+
+    try {
+      var saved = localStorage.getItem(CLUE_NOTE_KEY);
+      if (saved !== null) textarea.value = saved;
+    } catch (err){ /* 忽略無法讀取的情況 */ }
+
+    toggle.addEventListener("click", function(){
+      panel.hidden = !panel.hidden;
+    });
+    closeBtn.addEventListener("click", function(){
+      panel.hidden = true;
+    });
+    textarea.addEventListener("input", function(){
+      try { localStorage.setItem(CLUE_NOTE_KEY, textarea.value); }
+      catch (err){ /* 忽略無法寫入的情況 */ }
+    });
+  })();
+  </script>
+
+</body>
+</html>

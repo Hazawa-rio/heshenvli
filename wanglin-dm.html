@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陳旺霖 · 私訊</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:#0E0E10; color:#fff; font-family:"Noto Sans TC",sans-serif; line-height:1.7; display:flex; flex-direction:column;}
+  .dm-head{display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid #222; background:#151517;}
+  .dm-head img{width:40px; height:40px; border-radius:50%; object-fit:cover;}
+  .dm-head .nm{font-weight:700; font-size:15px;}
+  .dm-head .hd{font-size:12px; color:#8B8B8B;}
+  .dm-head a{margin-left:auto; color:#8B8B8B; font-size:13px; text-decoration:none;}
+  #log{flex:1; overflow-y:auto; padding:18px 14px 12px; display:flex; flex-direction:column; gap:12px; max-width:720px; width:100%; margin:0 auto;}
+  .msg{max-width:82%; padding:10px 14px; border-radius:16px; font-size:15px; white-space:pre-line; word-break:break-word;}
+  .msg.them{align-self:flex-start; background:#2A2A2D; border-bottom-left-radius:4px;}
+  .msg.me{align-self:flex-end; background:#3B6FD4; border-bottom-right-radius:4px;}
+  .msg.typing{color:#8B8B8B;}
+  .dm-form{display:flex; gap:8px; padding:10px 14px 16px; border-top:1px solid #222; background:#151517;}
+  .dm-form input{flex:1; padding:10px 14px; border-radius:20px; border:1px solid #333; background:#0E0E10; color:#fff; font-size:15px; font-family:inherit;}
+  .dm-form button{padding:10px 18px; border:none; border-radius:20px; background:#fff; color:#0E0E10; font-weight:700; cursor:pointer; font-family:inherit;}
+  .clue-note{position:fixed; right:20px; bottom:20px; z-index:120;}
+  .clue-note-toggle{
+    width:52px; height:52px; border-radius:50%;
+    background:#F4D35E; border:none; box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-size:22px; cursor:pointer; line-height:1;
+  }
+  .clue-note-toggle:hover{background:#E9C13F;}
+  .clue-note-panel{
+    position:absolute; right:0; bottom:64px;
+    width:260px; background:#FDF6D8; border:1px solid #E4D48A;
+    box-shadow:0 10px 26px rgba(0,0,0,.25); padding:12px;
+  }
+  .clue-note-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; font-weight:700; color:#6B5A1E; margin-bottom:8px;
+  }
+  .clue-note-close{background:none; border:none; font-size:14px; cursor:pointer; color:#6B5A1E; padding:0;}
+  #clueNoteText{
+    width:100%; min-height:140px; resize:vertical; box-sizing:border-box;
+    border:1px solid #E4D48A; background:#FFFDF0;
+    font-family:inherit; font-size:13px; padding:8px; outline:none;
+    color:#3A3220;
+  }
+  @media (max-width:480px){
+    .clue-note-panel{width:calc(100vw - 40px);}
+  }
+</style>
+</head>
+<body>
+<div class="dm-head">
+  <img src="assets/wanglin-avatar.jpg" alt="陳旺霖">
+  <div><div class="nm">陳旺霖</div><div class="hd">chen_wanglin</div></div>
+  <a href="jiaxing-diary.html">← 返回日記</a>
+</div>
+<div id="log"></div>
+<form class="dm-form" id="dmForm">
+  <input type="text" id="dmInput" placeholder="傳送訊息…" autocomplete="off" spellcheck="false">
+  <button type="submit">傳送</button>
+</form>
+
+<script>
+  var log = document.getElementById("log");
+  var form = document.getElementById("dmForm");
+  var input = document.getElementById("dmInput");
+  var stage = 0;       // 0：等待「郭楷杰」，1：等待「湯記小吃」，2：已結束
+  var busy = false;
+
+  function add(cls, html){
+    var m = document.createElement("div");
+    m.className = "msg " + cls;
+    m.innerHTML = html;
+    log.appendChild(m);
+    log.scrollTop = log.scrollHeight;
+    return m;
+  }
+  function esc(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function say(list, done){
+    busy = true;
+    var i = 0;
+    (function next(){
+      if (i >= list.length){ busy = false; if (done) done(); return; }
+      var t = add("them typing", "…");
+      setTimeout(function(){
+        t.className = "msg them";
+        t.innerHTML = list[i];
+        log.scrollTop = log.scrollHeight;
+        i++;
+        setTimeout(next, 700);
+      }, 1100);
+    })();
+  }
+
+  var STAGES = [
+    {keywords:["郭楷杰"], reply:[
+      "我在幾個月前，出現了一種很奇怪的感覺，<strong>我不記得我從甚麼時候開始是陳旺霖的</strong>，最近的怪事出現了許多，除了我希望你能協助四弟協尋郭楷杰的事情，也有件事情讓我耿耿於懷。"]},
+    {keywords:["湯記小吃","湯紀小吃","湯記","湯紀","湯婆婆"], reply:[
+      "是的，我很清楚湯婆婆確實住院了很久，但是期間卻依舊有一位長的像湯婆婆的朋友代班，但連身為她老公的阿崑伯都認不出來，這就很奇怪了。",
+      "我有稍微協助搭建人文紀事的事情，所以知道老爸也有一個隱藏頁面，搜尋老巷新聲就能看到他的出遊記錄。"]}
+  ];
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var text = input.value.trim();
+    if (!text || busy) return;
+    input.value = "";
+    add("me", esc(text));
+    if (stage >= STAGES.length) return;
+    var hit = STAGES[stage].keywords.some(function(k){ return text.indexOf(k) !== -1; });
+    if (hit){
+      var cur = STAGES[stage];
+      stage++;
+      say(cur.reply);
+    } else {
+      say(["不是這件事情。"]);
+    }
+  });
+
+  say(["是的，看樣子你具備相當的調查能力，也看過了大哥的日記了，我想你應該知道我希望你調查甚麼了吧？"]);
+</script>
+
+<div class="clue-note" id="clueNote">
+    <button type="button" class="clue-note-toggle" id="clueNoteToggle" aria-label="開啟線索便簽">📝</button>
+    <div class="clue-note-panel" id="clueNotePanel" hidden>
+      <div class="clue-note-head">
+        <span>線索便簽</span>
+        <button type="button" class="clue-note-close" id="clueNoteClose" aria-label="關閉便簽">✕</button>
+      </div>
+      <textarea id="clueNoteText" placeholder="在這裡記下你發現的線索…" spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var CLUE_NOTE_KEY = "heshanliClueNotes";
+    var toggle = document.getElementById("clueNoteToggle");
+    var panel = document.getElementById("clueNotePanel");
+    var closeBtn = document.getElementById("clueNoteClose");
+    var textarea = document.getElementById("clueNoteText");
+
+    try {
+      var saved = localStorage.getItem(CLUE_NOTE_KEY);
+      if (saved !== null) textarea.value = saved;
+    } catch (err){ /* 忽略無法讀取的情況 */ }
+
+    toggle.addEventListener("click", function(){
+      panel.hidden = !panel.hidden;
+    });
+    closeBtn.addEventListener("click", function(){
+      panel.hidden = true;
+    });
+    textarea.addEventListener("input", function(){
+      try { localStorage.setItem(CLUE_NOTE_KEY, textarea.value); }
+      catch (err){ /* 忽略無法寫入的情況 */ }
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -27,6 +27,8 @@
   .entry-body{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); white-space:pre-line;}
   .entry-body.grid{white-space:pre; overflow-x:auto; line-height:2.2; font-size:16px; padding-bottom:6px;}
   .entry-img{display:block; width:100%; max-width:560px; margin:16px auto 0; border-radius:8px; border:1px solid var(--line); background:#fff;}
+  .unlock-row .hint{width:100%; color:var(--muted); font-size:13px;}
+  .diary-link{color:var(--accent); font-weight:700; text-decoration:underline;}
   .unlock-row{display:none; margin-top:14px; gap:8px;}
   .unlock-row.show{display:flex; flex-wrap:wrap;}
   .unlock-row input{flex:1; min-width:160px; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:15px; font-family:inherit;}
@@ -76,12 +78,15 @@
 <script>
   /* ====== 日記設定：password 為解鎖密碼，content 為日記內容 ======
      第一篇密碼：由阿龍伯與小俊的資料推知（茶語時光）。
-     第二、三篇密碼與三篇內容尚未提供，之後補上。 */
+     第二篇密碼：進財會歡迎大家來奉獻；第三篇密碼：民宿頁面中標記為整修中的民宿地址（東楊路58號）。 */
   var DIARIES = [
     {no:"第一篇", title:"日記 · 一", password:"茶語時光", grid:true, image:"assets/diary-map.jpg",
      content:"我平常自認也算是健談，但有些心思沒法用話語表達，所以我將心思藏在了字裡行間。\n最近在和善里散步時，發現外地來的旅客相比平常來了更多，我好奇問了問原因原來是那間茶館最近成了網紅店～\n許多的人都是因為被那聽起來很莊嚴的喝茶儀式來的，不過茶館確實是有些偏僻！\n佳興哥我決定要來奉獻，從大家常進來的路口畫了一張到茶館的地圖，和善路進來2公尺開始跟箭頭～\n就當作是歡迎大家來到這裡，但畢竟是臨時起意，看上去還有些簡陋，哈哈。\n二哥進財會不會為這件事感到驚喜呢？不知道他的里長事務會不會讓他忙不過來？"},
-    {no:"第二篇", title:"日記 · 二", password:"進財會歡迎大家來奉獻", content:"（內容待補）"},
-    {no:"第三篇", title:"日記 · 三", password:"__TODO_3__", content:"（內容待補）"}
+    {no:"第二篇", title:"日記 · 二", password:"進財會歡迎大家來奉獻",
+     links:[{text:"三弟的聯絡方式", href:"wanglin-dm.html"}],
+     content:"今天來了一個帶著相機的年輕人，有些含蓄，我們是在茶館見面的，我邀請了他坐在我的對面，他說他是一個Youtuber，喜歡旅遊， 鏡頭下的他，顯然不像是影片中那樣開朗，我和他談心了一陣，他說他並沒有一個社交圈子，不擅交流的他只能透過鏡頭表達自我，不過感覺和善里很不一樣，這裡的所有人都相當歡迎他，明明是不認識的陌生人卻像是對待家人一樣的熱情，我很欣慰，我說「歡迎來到和善里！儘管把這裡當成自己的家吧！」他也感嘆道：「要是能住在這裡該有多好」我拍拍他的肩膀，並替他介紹了民宿也給了他三弟的聯絡方式，我也上了年紀，還是旺霖更懂年輕人的心情。"},
+    {no:"第三篇", title:"日記 · 三", passwords:["東楊路58號","和善里東楊路58號","大安區和善里東楊路58號","58號"], hint:"提示：他的去向",
+     content:"Join us是對的。"}
   ];
 
   var wrap = document.getElementById("entries");
@@ -92,22 +97,34 @@
       '<div class="entry-top"><div><div class="no"></div><h2></h2></div>' +
       '<button type="button" class="lock-btn">🔒 輸入密碼</button></div>' +
       '<div class="unlock-row"><input type="text" placeholder="請輸入密碼" autocomplete="off" spellcheck="false">' +
-      '<button type="button">解鎖</button><div class="err"></div></div>';
+      '<button type="button">解鎖</button><div class="hint"></div><div class="err"></div></div>';
     box.querySelector(".no").textContent = d.no;
     box.querySelector("h2").textContent = d.title;
     var lockBtn = box.querySelector(".lock-btn");
     var row = box.querySelector(".unlock-row");
     var input = row.querySelector("input");
     var err = row.querySelector(".err");
+    if (d.hint) row.querySelector(".hint").textContent = d.hint;
     lockBtn.addEventListener("click", function(){ row.classList.toggle("show"); if (row.classList.contains("show")) input.focus(); });
     function tryUnlock(){
-      if (input.value.trim() === d.password){
+      var typed = input.value.replace(/\s+/g, "").normalize("NFKC");
+      var accepted = d.passwords ? d.passwords : [d.password];
+      var ok = accepted.some(function(pw){ return typed === pw.normalize("NFKC"); });
+      if (ok){
         row.remove();
         lockBtn.textContent = "🔓 已解鎖";
         lockBtn.disabled = true;
         var body = document.createElement("div");
         body.className = "entry-body";
-        body.textContent = d.content;
+        if (d.links){
+          var html = d.content.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+          d.links.forEach(function(l){
+            html = html.replace(l.text, '<a class="diary-link" href="' + l.href + '">' + l.text + '</a>');
+          });
+          body.innerHTML = html;
+        } else {
+          body.textContent = d.content;
+        }
         if (d.grid){ body.classList.add("grid"); }
         box.appendChild(body);
         if (d.image){
